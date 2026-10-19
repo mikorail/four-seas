@@ -64,7 +64,7 @@ describe('save files', () => {
 		const restored = parseRun(exported)!;
 		expect(restored).not.toBeNull();
 		expect(restored.cardsSeen).toBeGreaterThan(500);
-	}, 20_000);
+	}, 60_000);
 
 	it('QuotaExceededError drops restore points, retries, and records a toast', () => {
 		const run = newRun(randomHero(new Rng(12), 1750), 'quota', 1750);

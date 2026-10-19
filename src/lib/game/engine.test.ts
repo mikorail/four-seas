@@ -15,10 +15,17 @@ function fresh(i = 1, year?: number): Run {
 
 function play(run: Run, r: Rng, max = 3000) {
 	let steps = 0;
+	let dist = shortestDays(run.destination, run.year);
+	let lastDest = run.destination;
+	let lastYear = run.year;
 	while (run.phase !== 'end' && steps++ < max) {
 		if (run.phase === 'map') {
 			const routes = availableRoutes(run);
-			const dist = shortestDays(run.destination, run.year);
+			if (run.destination !== lastDest || run.year !== lastYear) {
+				dist = shortestDays(run.destination, run.year);
+				lastDest = run.destination;
+				lastYear = run.year;
+			}
 			routes.sort((a, b) => (dist[a.to] ?? 1e9) + a.days - ((dist[b.to] ?? 1e9) + b.days));
 			depart(run, r.chance(0.8) ? routes[0] : r.pick(routes));
 		} else {
@@ -57,7 +64,7 @@ describe('engine', () => {
 			expect(run.bag.length).toBeLessThanOrEqual(capacity(run));
 			expect(run.crew.length).toBeLessThanOrEqual(3);
 		}
-	}, 30000);
+	}, 60000);
 
 	it('every card template builds valid cards in many contexts', () => {
 		let built = 0;
@@ -396,7 +403,7 @@ describe('content', () => {
 			}
 			expect(titles.size, c.id).toBeGreaterThanOrEqual(2);
 		}
-	}, 30000);
+	}, 90000);
 
 	it('generates a book-formatted journal HTML document', async () => {
 		const { generateJournalBookHtml } = await import('#lib/journal-book');

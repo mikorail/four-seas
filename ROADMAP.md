@@ -181,12 +181,13 @@ Sizes: S = an hour or two, M = a day, L = several days. Ready-made agent prompts
 
 ### P3 · Content
 - [x] **Japanese and Chinese campaign texts** (M): titles, blurbs, then card text; keep CJK fonts regenerated (`npm run fonts`).
-- [x] **New campaigns** (M each): Imjin War 1592 (Korean/Japanese sides), Opium War 1839 (Canton), Shimabara 1637, Meiji Restoration 1868, Tea-Horse Road. Use `src/content/campaigns/*.md` and check them in `scripts/campaign-sim.ts`.
+- [x] **New campaigns** (M each): Imjin War 1592 (Korean/Japanese sides), Opium War 1839 (Canton), Shimabara 1637, Meiji Restoration 1868, Tea-Horse Road, plus European/Ottoman/Steppe campaigns: The Tulip and the Ledger 1636, Tournament of Shadows (Great Game) 1838, The Gates of Vienna 1683, The Tenshō Embassy 1584 (all 19/19 campaigns at 100% beat reachability in `scripts/campaign-sim.ts`).
+- [x] **Europe, Ottoman, Caucasus, Central Asia & Africa World Expansion** (L): 31 new historical cities (Seville, Madrid, Paris, Marseille, Genoa, Florence, Antwerp, Hamburg, Vienna, Prague, Kraków, St. Petersburg, Stockholm, Ragusa, Belgrade, Smyrna, Trebizond, Caffa, Kazan, Tiflis, Baku, Kokand, Merv, Balkh, Orenburg, Kulja, Karakorum, Algiers, Fez, Timbuktu, Sofala), 4 secret routes (Amber Road, Dariel Pass, Tuareg Salt Trail, Caspian Naphtha Run), 3 outfits, 6 curios, 5 rare historical encounters (Galileo, Rembrandt, Evliya Çelebi, Ulugh Beg's astronomers, Linnaeus's apostle), 6 custom SVG skylines, and regional street rumors.
 - [ ] **Per-culture quests** (M): 2+ quest lines per culture with their own items and places (as Realmforge's sphere quests).
 - [ ] **More profession beats** (S each): new professions have 3 beats; grow the most played ones to 5 with an ending.
 
 ### P4 · Balance
-- [x] **Per-profession and per-goal sim** (S): `scripts/sim.ts` reporting win rate by profession and goal completion rate; flag outliers (>±10% from mean).
+- [x] **Per-profession and per-goal sim** (S): `scripts/sim.ts` reporting win rate by profession and goal completion rate; flag outliers (>±10% from mean); tuned `dancer`, `scholar`, `performer`, `smuggler` perks and eased steep life-goal thresholds.
 - [x] **Skill inflation check** (S): average skill level at day 300; make sure level 6+ perks do not trivialise legend.
 - [ ] **Economy pass** (M): silver curve over a long journey with home garden, fences and fairs; contraband should be tempting, not dominant.
 

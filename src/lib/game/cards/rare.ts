@@ -120,6 +120,98 @@ export const RARE_T: Template[] = [
 			};
 		}
 	},
+	{
+		id: 'rare-galileo',
+		where: 'city',
+		once: true,
+		rare: true,
+		weight: (c) => (at(c, ['venice', 'rome', 'florence']) && yr(c, 1609, 1633) ? R * 4 : 0),
+		make: (c) => {
+			const n = npc(c, 'scholar', { culture: 'european', gender: 'm', name: 'Galileo Galilei', title: 'Mathematician and stargazer' });
+			return {
+				id: 'rare-galileo',
+				npc: n,
+				badge: '✦ Rare',
+				text: `On a windy loggia after dusk, a bearded professor aims a leather-wrapped tube of ground lenses at the sky. **Galileo Galilei** beckons you to the eyepiece. "Four little stars, circling Jupiter like moons. Look quickly, before the inquisitors decide that glass is heresy."`,
+				left: ch('Peer through the glass and debate the heavens', { renown: 10, fortune: 4 }, { tags: ['art', 'talk'], days: 1, thought: 'comet-sign', text: 'You watch four pinpricks of light wheel across the dark. The sky feels ten times larger than it did at sunset.' }),
+				right: ch('Buy one of his workshop spyglasses', { silver: -10, renown: 4 }, { tags: ['trade'], itemAdd: ['telescope'], text: 'He wraps a brass-fitted perspicillum in oiled wool. "Point it at ships or stars. Both move."' }),
+				up: has(c, 'scholar') || has(c, 'cartographer') ? up('Scholar', 'Share eastern eclipse tables with him', { renown: 16 }, { tags: ['art', 'talk'], itemAdd: ['telescope'], text: 'He copies your figures by candlelight and presses a spare spyglass into your hands in return.' }) : undefined
+			};
+		}
+	},
+	{
+		id: 'rare-rembrandt',
+		where: 'city',
+		once: true,
+		rare: true,
+		weight: (c) => (at(c, ['amsterdam']) && yr(c, 1632, 1669) ? R * 4 : 0),
+		make: (c) => {
+			const n = npc(c, 'performer', { culture: 'european', gender: 'm', name: 'Rembrandt van Rijn', title: 'Master painter of the Breestraat' });
+			return {
+				id: 'rare-rembrandt',
+				npc: n,
+				badge: '✦ Rare',
+				text: `In a house on the Sint Antoniesbreestraat crammed with Turkish helmets, shells, and Japanese armour, a painter with ink under his fingernails studies the road-dust on your coat. **Rembrandt van Rijn** reaches for a copper etching plate. "Hold still in that light. The shadow across your brow is worth ten guilders."`,
+				left: ch('Pose in his studio curiosities', { renown: 12, fortune: 4 }, { tags: ['art'], days: 1, thought: 'mianzi-cage', text: 'He scratches your likeness into wax with a needle. Half of Amsterdam will see your face in the print-shop window.' }),
+				right: ch('Sell him a curio from the East', { silver: 14, renown: 4 }, { tags: ['trade', 'art'], text: 'He pays without haggling, already holding the piece up to the north window to see how it catches the gloom.' })
+			};
+		}
+	},
+	{
+		id: 'rare-evliya',
+		where: 'any',
+		once: true,
+		rare: true,
+		weight: (c) => ((inCulture(c, 'ottoman') || at(c, ['vienna', 'cairo', 'istanbul', 'tabriz', 'baku'])) && yr(c, 1640, 1682) ? R * 4 : 0),
+		make: (c) => {
+			const n = npc(c, 'scholar', { culture: 'ottoman', gender: 'm', name: 'Evliya Çelebi', title: 'Author of the Book of Travels' });
+			const sec = nearSecret(c, 4);
+			return {
+				id: 'rare-evliya',
+				npc: n,
+				badge: '✦ Rare',
+				text: `At a coffee-house corner table, a gentleman with ink-stained cuffs is filling his tenth leather notebook with slang, recipes, miracles, and headcounts of every bathhouse in the city. **Evliya Çelebi** grins and pours you a cup. "The Prophet appeared to me in a dream, and instead of asking for intercession, my tongue slipped and I asked for travel. Sit! Trade me a road."`,
+				left: ch('Swap travellers’ tales until dawn', { renown: 8, fortune: 4 }, { tags: ['talk', 'art'], days: 1, thought: 'ten-thousand-li', ...(sec ? { setFlag: { ['secret:' + sec.id]: true }, text: `Between tall tales he sketches a real shortcut in the margin: ${sec.hint}. "Write my name in your book," he says, "and I will write yours in my Seyahatname."` } : { text: 'He writes your name and three of your best stories into his Seyahatname, embellishing each only slightly.' }) }),
+				right: ch('Ask him about the local dialect', { renown: 6 }, { tags: ['talk'], thought: 'many-tongues', text: 'He teaches you seven proverbs, four curses, and the exact phrase that makes local gate-guards laugh.' })
+			};
+		}
+	},
+	{
+		id: 'rare-ulugh-beg-heirs',
+		where: 'city',
+		once: true,
+		rare: true,
+		weight: (c) => (at(c, ['samarkand', 'bukhara']) ? R * 3.5 : 0),
+		make: (c) => {
+			const n = npc(c, 'scholar', { culture: 'steppe', gender: 'm', name: 'Qadi-zadeh’s Successor', title: 'Astronomer of the great sextant' });
+			return {
+				id: 'rare-ulugh-beg-heirs',
+				npc: n,
+				badge: '✦ Rare',
+				text: `On the hill of Kuhak outside the walls, two old astronomers sit beside the buried marble arc of **Ulugh Beg’s Observatory**, checking the star tables of the *Zij-i Sultani* against a brass astrolabe. "The prince lost his head for loving the stars more than war," one murmurs, "but his numbers are still off by less than a heartbeat a year."`,
+				left: ch('Help calculate the night’s meridian', { renown: 8, fortune: 6 }, { tags: ['art', 'talk'], days: 1, thought: 'comet-sign', text: 'Sunlight and starlight slide down the underground marble trench. Your road ahead feels measured to the second.' }),
+				right: ch('Purchase a calibrated brass astrolabe', { silver: -11, renown: 4 }, { tags: ['trade'], itemAdd: ['curio-astrolabe'], text: 'Engraved with the latitudes of forty cities from Samarkand to Cathay.' })
+			};
+		}
+	},
+	{
+		id: 'rare-linnaeus-apostle',
+		where: 'any',
+		once: true,
+		rare: true,
+		weight: (c) => (inCulture(c, 'european', 'malay', 'japanese') && yr(c, 1750, 1795) ? R * 3.5 : 0),
+		make: (c) => {
+			const n = npc(c, 'healer', { culture: 'european', gender: 'm', name: 'Carl Peter Thunberg', title: 'Botanist from Uppsala' });
+			return {
+				id: 'rare-linnaeus-apostle',
+				npc: n,
+				badge: '✦ Rare',
+				text: `A sunburned Swedish doctor in a coat bulging with seed-packets is pressing mountain leaves between sheets of blotting paper. **Carl Peter Thunberg**, one of Professor Linnaeus’s travelling apostles, wipes his spectacles. "Every plant in creation needs two Latin names, and half of them will cure a fever if you boil the right root."`,
+				left: ch('Gather rare specimens with him', { vigor: 8, renown: 8 }, { tags: ['art', 'illness'], days: 1, itemAdd: ['fever-tonic'], text: 'You climb two ridges together. He names a shrub after you in his herbarium and brews a tonic from the bark.' }),
+				right: ch('Trade road notes for his medical kit', { vigor: 6, fortune: 4 }, { tags: ['trade', 'illness'], itemAdd: ['medicine'], text: 'He trades a tin of Uppsala powders for seeds stuck to the hem of your cloak.' })
+			};
+		}
+	},
 	// ---------- things that should not happen ----------
 	{
 		id: 'rare-mirror',

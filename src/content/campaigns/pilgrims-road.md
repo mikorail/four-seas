@@ -1,6 +1,6 @@
 campaign: pilgrims-road
 title: The Pilgrim's Road
-blurb: Like the monk Xuanzang a thousand years before, walk from Chang'an across deserts and mountains to the Deer Park where the Buddha first taught — and bring the true sutras home.
+blurb: Like the monk Xuanzang a thousand years before, walk from Chang'an across deserts and mountains to the Deer Park where the Buddha first taught, and bring the true sutras home.
 start: xian
 destination: varanasi
 years: 1500-1900
@@ -31,10 +31,12 @@ set: scholar
 text: "The road does not care why you walk it," the abbot says, offering travel funds for the long road.
 
 # beat: dunhuang
-at: dunhuang
+at: any
+where: any
 speaker: monk
 title: Guardian of the Mogao Caves
 culture: han
+weight: 180
 ---
 At the edge of the desert, a thousand painted caves glow in the cliff. **{npc}** lets you copy a forgotten map of the old pilgrims' wells. "Without it the Taklamakan will drink you."
 
@@ -131,7 +133,7 @@ ending: won | The Sutras Come Home | You carry the palm leaves back across mount
 ## right: Stay at the Deer Park as a monk
 fx: fortune +16
 tags: faith
-ending: won | The Quiet Monk of Sarnath | You never go home. You sweep the Deer Park every morning, and teach every pilgrim who arrives — as tired and amazed as you once were.
+ending: won | The Quiet Monk of Sarnath | You never go home. You sweep the Deer Park every morning, and teach every pilgrim who arrives, as tired and amazed as you once were.
 
 ## up(Scholar): Translate the sutras here, in both languages
 requires_flag: scholar

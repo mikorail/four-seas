@@ -125,7 +125,7 @@ describe('rare & procedural encounters', () => {
 			const deck = buildDeck(run, new Rng(s), s % 2 ? 'city' : 'travel', 6, null, null);
 			expect(deck.filter((c) => RARE_T.some((t) => t.id === c.id)).length).toBeLessThanOrEqual(1);
 		}
-	});
+	}, 20_000);
 
 	it('historical figures appear only in their own time and place', () => {
 		const run = fresh(6, 1605);

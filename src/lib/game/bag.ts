@@ -31,12 +31,12 @@ export const EXTRA_BAGS: Record<string, { name: string; glyph: string; w: number
 export const maxExtraBags = (run: Pick<Run, 'mount'>) => (run.mount ? 2 : 1);
 
 const SHAPE: Record<string, [number, number]> = {
-	sword: [3, 1], 'cursed-blade': [3, 1], 'avenger-blade': [3, 1], 'curio-katana': [3, 1], 'koxinga-flag': [3, 1], 'curio-carpet': [3, 1],
-	medicine: [2, 1], telescope: [2, 1], finery: [2, 1], 'balloon-plans': [2, 1], pistol: [2, 1], 'curio-thangka': [2, 1], 'curio-kris': [2, 1], 'curio-lacquer-box': [2, 1], 'hang-tuah-kris': [2, 1], 'emerald-sash': [2, 1], 'hunting-knife': [2, 1], 'heirloom-blade': [2, 1],
-	'monk-robes': [2, 1], 'mandarin-robe': [2, 1], 'janissary-uniform': [2, 1], 'company-uniform': [2, 1], 'pirate-garb': [2, 1], 'merchant-silks': [2, 1], 'pilgrim-garb': [2, 1], 'scholar-robes': [2, 1], 'explorer-kit': [2, 1], 'local-dress': [2, 1],
+	sword: [3, 1], 'cursed-blade': [3, 1], 'avenger-blade': [3, 1], 'curio-katana': [3, 1], 'koxinga-flag': [3, 1], 'curio-carpet': [3, 1], 'curio-damascus-blade': [3, 1],
+	medicine: [2, 1], telescope: [2, 1], finery: [2, 1], 'balloon-plans': [2, 1], pistol: [2, 1], 'curio-thangka': [2, 1], 'curio-kris': [2, 1], 'curio-lacquer-box': [2, 1], 'hang-tuah-kris': [2, 1], 'emerald-sash': [2, 1], 'hunting-knife': [2, 1], 'heirloom-blade': [2, 1], 'curio-suzani': [2, 1], 'curio-amber': [2, 1],
+	'monk-robes': [2, 1], 'mandarin-robe': [2, 1], 'janissary-uniform': [2, 1], 'company-uniform': [2, 1], 'pirate-garb': [2, 1], 'merchant-silks': [2, 1], 'pilgrim-garb': [2, 1], 'scholar-robes': [2, 1], 'explorer-kit': [2, 1], 'local-dress': [2, 1], 'venetian-bauta': [2, 1], 'steppe-chapan': [2, 1], 'hussar-pelisse': [2, 1],
 	'silk-turban': [1, 1], 'beggar-rags': [1, 1],
-	lantern: [1, 2], 'gold-idol': [1, 2], 'curio-celadon': [1, 2], 'curio-clock': [1, 2], 'curio-buddha': [1, 2], lockbox: [1, 2],
-	camera: [2, 2], 'yeti-fur': [2, 2], 'curio-blue-white': [2, 2], 'curio-ivory-chess': [2, 2], 'curio-feather-cloak': [2, 2], 'samurai-armor': [2, 2]
+	lantern: [1, 2], 'gold-idol': [1, 2], 'curio-celadon': [1, 2], 'curio-clock': [1, 2], 'curio-buddha': [1, 2], lockbox: [1, 2], 'curio-murano': [1, 2], 'curio-tulip-vase': [1, 2],
+	camera: [2, 2], 'yeti-fur': [2, 2], 'curio-blue-white': [2, 2], 'curio-ivory-chess': [2, 2], 'curio-feather-cloak': [2, 2], 'samurai-armor': [2, 2], 'curio-samovar': [2, 2]
 };
 
 export function shapeOf(id: string, r = false): [number, number] {

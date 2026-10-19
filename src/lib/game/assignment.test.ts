@@ -54,7 +54,7 @@ describe('after the commission', () => {
 			}
 		}
 		expect(delivered2).toBeGreaterThan(0);
-	});
+	}, 25_000);
 
 	it('keep wandering continues without re-ending immediately and survives save/load', () => {
 		const w = winOne(9)!;

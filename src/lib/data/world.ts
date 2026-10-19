@@ -248,7 +248,39 @@ export const CITIES: City[] = [
 	{ id: 'penglai', name: 'Penglai', lat: 38.6, lon: 124.4, culture: 'han', port: true, exports: 'ginseng', secret: true, blurb: 'The island of the Immortals, seen from the coast only as a mirage.' },
 	{ id: 'suvarnadvipa', name: 'Suvarnadvipa', lat: -1.2, lon: 99.6, culture: 'malay', port: true, exports: 'silver bars', secret: true, blurb: 'The Gold Island of Indian and Arab legend, where rivers run yellow.' },
 	{ id: 'waqwaq', name: 'The Waq-waq Isles', lat: -20.5, lon: 63.5, culture: 'swahili', port: true, exports: 'pearls', secret: true, blurb: 'Islands of the singing trees, beyond the edge of every Arab chart.' },
-	{ id: 'acapulco', name: 'Acapulco', lat: 16.85, lon: -99.88, culture: 'european', port: true, exports: 'silver bars', from: 1565, blurb: 'Where the Manila galleon unloads its silks for New Spain.' }
+	{ id: 'acapulco', name: 'Acapulco', lat: 16.85, lon: -99.88, culture: 'european', port: true, exports: 'silver bars', from: 1565, blurb: 'Where the Manila galleon unloads its silks for New Spain.' },
+	// ===== Europe, Ottoman, Caucasus, Central Asia & Africa expansion =====
+	{ id: 'seville', name: 'Seville', lat: 37.39, lon: -5.98, culture: 'european', port: true, exports: 'silver bars', blurb: 'River port of the Guadalquivir where the Casa de Contratación weighs the silver of New Spain.' },
+	{ id: 'madrid', name: 'Madrid', lat: 40.42, lon: -3.7, culture: 'european', port: false, exports: 'woolens', from: 1561, blurb: 'High plateau court of the Spanish Habsburgs, ringed by austere monasteries and royal plazas.' },
+	{ id: 'paris', name: 'Paris', lat: 48.86, lon: 2.35, culture: 'european', port: false, exports: 'glassware', blurb: 'Grand capital on the Seine, of salons, philosophies, and royal tapestry workshops.' },
+	{ id: 'marseille', name: 'Marseille', lat: 43.3, lon: 5.37, culture: 'european', port: true, exports: 'woolens', blurb: 'Ancient Mediterranean harbor where galleys and Levant merchants unload Levantine silk and coffee.' },
+	{ id: 'genoa', name: 'Genoa', lat: 44.41, lon: 8.93, culture: 'european', port: true, exports: 'silver bars', blurb: 'La Superba: marble palaces of bankers who finance empires across both oceans.' },
+	{ id: 'florence', name: 'Florence', lat: 43.77, lon: 11.26, culture: 'european', port: false, exports: 'silk', blurb: 'City of the Medici, where goldsmiths, lens-grinders, and painters crowd the Ponte Vecchio.' },
+	{ id: 'antwerp', name: 'Antwerp', lat: 51.22, lon: 4.4, culture: 'european', port: true, exports: 'gemstones', blurb: 'Bourse on the Scheldt where Portuguese spices, Flemish cloth, and rough diamonds change hands.' },
+	{ id: 'hamburg', name: 'Hamburg', lat: 53.55, lon: 9.99, culture: 'european', port: true, exports: 'glassware', blurb: 'Free Hanseatic port on the Elbe, smelling of Baltic pitch, copper, and roasted coffee.' },
+	{ id: 'vienna', name: 'Vienna', lat: 48.21, lon: 16.37, culture: 'european', port: false, exports: 'glassware', blurb: 'Imperial seat on the Danube, bastion of the Habsburgs and city of coffeehouses and court music.' },
+	{ id: 'prague', name: 'Prague', lat: 50.08, lon: 14.44, culture: 'european', port: false, exports: 'glassware', blurb: 'City of a hundred spires, where alchemists and astronomers gather beneath the castle.' },
+	{ id: 'krakow', name: 'Kraków', lat: 50.06, lon: 19.94, culture: 'european', port: false, exports: 'furs', blurb: 'Royal citadel on the Vistula, where Sarmatian nobles trade Baltic amber and Oriental carpets.' },
+	{ id: 'stpetersburg', name: 'St. Petersburg', lat: 59.93, lon: 30.34, culture: 'european', port: true, exports: 'furs', from: 1703, blurb: 'The Tsar’s granite window on the Baltic, raised over Neva marshes by decree and iron will.' },
+	{ id: 'stockholm', name: 'Stockholm', lat: 59.33, lon: 18.07, culture: 'european', port: true, exports: 'steel blades', blurb: 'Island capital of the north, shipping Swedish bar iron, tar, and brass cannon across the Baltic.' },
+	{ id: 'ragusa', name: 'Ragusa', lat: 42.65, lon: 18.09, culture: 'european', port: true, exports: 'silver bars', blurb: 'Walled Adriatic republic that pays tribute to the Sultan and trades freely with all Christendom.' },
+	{ id: 'belgrade', name: 'Belgrade', lat: 44.82, lon: 20.46, culture: 'ottoman', port: false, exports: 'horses', blurb: 'White fortress at the confluence of the Danube and Sava, contested key to Central Europe.' },
+	{ id: 'smyrna', name: 'Smyrna', lat: 38.42, lon: 27.14, culture: 'ottoman', port: true, exports: 'carpets', blurb: 'Cosmopolitan Aegean port of Frankish factors, Armenian silk brokers, and Anatolian caravans.' },
+	{ id: 'trebizond', name: 'Trebizond', lat: 41.0, lon: 39.72, culture: 'ottoman', port: true, exports: 'silk', blurb: 'Misty Black Sea harbor where Persian camel trains descend from the Pontic mountains.' },
+	{ id: 'caffa', name: 'Caffa', lat: 45.03, lon: 35.38, culture: 'ottoman', port: true, exports: 'furs', blurb: 'Crimean fortress port where steppe horsemen, Genoese stones, and Ottoman galleys meet.' },
+	{ id: 'kazan', name: 'Kazan', lat: 55.79, lon: 49.12, culture: 'steppe', port: false, exports: 'furs', blurb: 'White-walled citadel on the Volga bend, where Tatar merchants trade Siberian pelts and leather.' },
+	{ id: 'tbilisi', name: 'Tiflis', lat: 41.72, lon: 44.79, culture: 'persian', port: false, exports: 'silk', blurb: 'Sulfur baths and cliffside balconies in the gorge of the Kura, between two empires.' },
+	{ id: 'baku', name: 'Baku', lat: 40.37, lon: 49.89, culture: 'persian', port: true, exports: 'carpets', blurb: 'Walled Caspian port of eternal hillside flames, naphtha wells, and Shirvanshah stone.' },
+	{ id: 'kokand', name: 'Kokand', lat: 40.53, lon: 70.94, culture: 'steppe', port: false, exports: 'horses', blurb: 'Khanate of the fertile Fergana Valley, guarding the high passes toward Kashgar.' },
+	{ id: 'merv', name: 'Merv', lat: 37.66, lon: 62.16, culture: 'persian', port: false, exports: 'carpets', blurb: 'Ancient oasis of Khorasan, where domes of baked brick rise above the Karakum sands.' },
+	{ id: 'balkh', name: 'Balkh', lat: 36.76, lon: 66.9, culture: 'persian', port: false, exports: 'gemstones', blurb: 'Mother of Cities, where Zoroastrian fire, Buddhist stupas, and Timurid tilework sleep together.' },
+	{ id: 'orenburg', name: 'Orenburg', lat: 51.77, lon: 55.1, culture: 'european', port: false, exports: 'furs', from: 1743, blurb: 'Russian frontier fortress on the Ural River where Kazakh horse herds and Bukharan caravans barter.' },
+	{ id: 'ili', name: 'Kulja', lat: 43.92, lon: 81.32, culture: 'steppe', port: false, exports: 'horses', blurb: 'Pasture capital of the Ili River valley, winter camp of Dzungar khans and frontier bannermen.' },
+	{ id: 'karakorum', name: 'Karakorum', lat: 47.2, lon: 102.85, culture: 'steppe', port: false, exports: 'horses', blurb: 'Stone tortoises on the Orkhon plain and the white walls of Erdene Zuu monastery.' },
+	{ id: 'algiers', name: 'Algiers', lat: 36.78, lon: 3.06, culture: 'ottoman', port: true, exports: 'steel blades', blurb: 'The White City of the Barbary coast, its harbor bristling with corsair xebecs.' },
+	{ id: 'fez', name: 'Fez', lat: 34.06, lon: -4.98, culture: 'ottoman', port: false, exports: 'carpets', blurb: 'Labyrinth of dye-vats, cedar madrasas, and trans-Saharan gold caravans.' },
+	{ id: 'timbuktu', name: 'Timbuktu', lat: 16.77, lon: -3.01, culture: 'swahili', port: false, exports: 'silver bars', blurb: 'Mud-brick libraries at the bend of the Niger, where salt slabs are traded for desert gold.' },
+	{ id: 'sofala', name: 'Sofala', lat: -20.15, lon: 34.72, culture: 'swahili', port: true, exports: 'gemstones', blurb: 'Monsoon estuary port where gold from the inland kingdoms of Monomotapa reaches the sea.' }
 ];
 
 export const CITY: Record<string, City> = Object.fromEntries(CITIES.map((c) => [c.id, c]));
@@ -282,8 +314,18 @@ naha-kagoshima naha-tainan naha-fuzhou naha-quanzhou
 semarang-batavia semarang-surabaya surabaya-makassar surabaya-banjarmasin banjarmasin-batavia banjarmasin-makassar
 patani-singapore patani-bangkok patani-malacca patani-hoian
 pondicherry-madras pondicherry-colombo pondicherry-calicut shiraz-bandarabbas shiraz-hormuz
-alexandria-cairo alexandria-istanbul alexandria-venice alexandria-carthage alexandria-athens athens-istanbul athens-venice athens-carthage carthage-lisbon carthage-venice`;
-const RIVER = `yangzhou-nanjing yangzhou-suzhou suzhou-hangzhou kaifeng-nanjing ava-mandalay ava-pegu irkutsk-yakutsk varanasi-calcutta luangprabang-vientiane vientiane-phnompenh astrakhan-moscow wudang-nanjing nanjing-hangzhou nanjing-beijing nanjing-shanghai chengdu-nanjing calcutta-dhaka pegu-mandalay bangkok-ayutthaya phnompenh-saigon basra-baghdad chongqing-wuhan wuhan-nanjing wuhan-yangzhou chengdu-chongqing uiju-pyongyang alexandria-cairo patna-varanasi patna-calcutta patna-dhaka angkor-phnompenh angkor-saigon`;
+alexandria-cairo alexandria-istanbul alexandria-venice alexandria-carthage alexandria-athens athens-istanbul athens-venice athens-carthage carthage-lisbon carthage-venice
+seville-lisbon seville-havana seville-veracruz seville-cartagena seville-algiers seville-marseille seville-genoa
+marseille-genoa marseille-rome marseille-algiers marseille-carthage marseille-alexandria
+genoa-rome genoa-venice genoa-carthage
+antwerp-amsterdam antwerp-london antwerp-lisbon antwerp-seville hamburg-amsterdam hamburg-london hamburg-antwerp
+stockholm-hamburg stockholm-amsterdam stockholm-stpetersburg@1703 stpetersburg-amsterdam@1703 stpetersburg-london@1703
+ragusa-venice ragusa-athens ragusa-istanbul ragusa-alexandria
+smyrna-istanbul smyrna-athens smyrna-alexandria smyrna-venice smyrna-marseille
+trebizond-istanbul trebizond-caffa caffa-istanbul
+algiers-carthage algiers-lisbon
+sofala-kilwa sofala-zanzibar sofala-capetown@1652`;
+const RIVER = `yangzhou-nanjing yangzhou-suzhou suzhou-hangzhou kaifeng-nanjing ava-mandalay ava-pegu irkutsk-yakutsk varanasi-calcutta luangprabang-vientiane vientiane-phnompenh astrakhan-moscow wudang-nanjing nanjing-hangzhou nanjing-beijing nanjing-shanghai chengdu-nanjing calcutta-dhaka pegu-mandalay bangkok-ayutthaya phnompenh-saigon basra-baghdad chongqing-wuhan wuhan-nanjing wuhan-yangzhou chengdu-chongqing uiju-pyongyang alexandria-cairo patna-varanasi patna-calcutta patna-dhaka angkor-phnompenh angkor-saigon kazan-moscow kazan-astrakhan vienna-belgrade belgrade-istanbul`;
 const LAND = `beijing-xian xian-chengdu beijing-hanseong hanseong-busan kyoto-osaka kyoto-edo beijing-urga urga-kyakhta kyakhta-moscow
 xian-kashgar kashgar-samarkand samarkand-bukhara bukhara-isfahan samarkand-kabul kabul-lahore lahore-delhi delhi-agra agra-surat
 agra-calcutta hampi-goa hampi-madras hampi-calicut isfahan-bandarabbas isfahan-hormuz isfahan-baghdad baghdad-aleppo aleppo-istanbul aleppo-cairo
@@ -301,7 +343,18 @@ kanazawa-kyoto sendai-edo sendai-matsumae
 datong-beijing datong-xian luoyang-kaifeng luoyang-xian luoyang-wuhan kham-chengdu kham-lhasa
 dunhuang-hami hami-turfan khotan-yarkand yarkand-kashgar tashkent-samarkand tashkent-khiva tashkent-kashgar
 shiraz-isfahan yazd-isfahan yazd-shiraz yazd-mashhad mataram-semarang mataram-surabaya
-damascus-aleppo damascus-jerusalem damascus-baghdad damascus-antioch antioch-aleppo antioch-istanbul patna-kathmandu patna-agra taxila-lahore taxila-kabul taxila-srinagar taxila-kashgar angkor-ayutthaya angkor-bangkok`;
+damascus-aleppo damascus-jerusalem damascus-baghdad damascus-antioch antioch-aleppo antioch-istanbul patna-kathmandu patna-agra taxila-lahore taxila-kabul taxila-srinagar taxila-kashgar angkor-ayutthaya angkor-bangkok
+seville-madrid madrid-lisbon madrid-paris paris-marseille paris-antwerp paris-genoa
+antwerp-amsterdam amsterdam-hamburg hamburg-prague prague-vienna vienna-venice vienna-krakow krakow-prague krakow-moscow
+stpetersburg-moscow@1703 stpetersburg-krakow@1703
+florence-genoa florence-rome florence-venice
+vienna-belgrade belgrade-ragusa belgrade-istanbul belgrade-athens
+smyrna-istanbul smyrna-aleppo trebizond-tabriz trebizond-aleppo trebizond-tbilisi
+tbilisi-tabriz tbilisi-baku tbilisi-astrakhan baku-isfahan baku-tabriz baku-astrakhan
+caffa-moscow kazan-tobolsk kazan-orenburg@1743 orenburg-moscow@1743 orenburg-khiva@1743 orenburg-tashkent@1743
+kokand-tashkent kokand-kashgar kokand-samarkand merv-mashhad merv-bukhara merv-herat balkh-samarkand balkh-kabul balkh-herat balkh-bukhara
+ili-tashkent ili-turfan ili-kashgar ili-urga karakorum-urga karakorum-kyakhta karakorum-hami
+fez-algiers fez-seville algiers-carthage fez-timbuktu`;
 
 export interface Edge {
 	a: string;
@@ -328,7 +381,11 @@ export const SECRETS: { id: string; name: string; edges: string; mode: Mode; hin
 	{ id: 'salt-road', name: 'The Salt Road over the Himalaya', edges: 'calcutta-kathmandu dhaka-kathmandu', mode: 'land', hint: 'Newar traders carry salt and silver over passes no map shows' },
 	{ id: 'grand-canal-cut', name: 'The Old Canal Cut', edges: 'hangzhou-wuhan nanjing-ningbo', mode: 'river', hint: 'a silted Sui-dynasty canal still passable at high water' },
 	{ id: 'pearl-smugglers', name: 'The Pearl River Back Door', edges: 'macau-tainan hongkong-quanzhou', mode: 'sea', hint: 'opium clippers run without lights between the Pearl River and Formosa' },
-	{ id: 'qanat-way', name: 'The Way of the Qanats', edges: 'hormuz-yazd basra-isfahan', mode: 'land', hint: 'underground water channels with caravanserais hidden below the desert' }
+	{ id: 'qanat-way', name: 'The Way of the Qanats', edges: 'hormuz-yazd basra-isfahan', mode: 'land', hint: 'underground water channels with caravanserais hidden below the desert' },
+	{ id: 'amber-road', name: 'The Old Amber Road', edges: 'krakow-venice stpetersburg-vienna', mode: 'land', hint: 'amber merchants follow a Roman wagon track from the Baltic over the Carnic Alps to the lagoon' },
+	{ id: 'dariel-pass', name: 'The Gorge of Dariel', edges: 'moscow-tbilisi caffa-tbilisi', mode: 'land', hint: 'a sheer cleft through the Caucasus snows guarded by Alan watchtowers' },
+	{ id: 'saharan-gold', name: 'The Tuareg Salt Trail', edges: 'carthage-timbuktu cairo-timbuktu', mode: 'land', hint: 'blue-veiled guides lead camels from well to secret well across the great sand sea' },
+	{ id: 'caspian-sea-lane', name: 'The Caspian Naphtha Run', edges: 'astrakhan-baku baku-mashhad', mode: 'sea', hint: 'shallow-draft coasters slip across the inland sea carrying black oil and Gilan silk' }
 ];
 
 function parse(s: string, mode: Mode): Edge[] {
@@ -356,6 +413,12 @@ const SECRET_EDGES: Edge[] = SECRETS.flatMap((x) =>
 );
 
 export const EDGES: Edge[] = [...parse(SEA, 'sea'), ...parse(RIVER, 'river'), ...parse(LAND, 'land'), ...SECRET_EDGES];
+
+const EDGES_BY_CITY: Record<string, Edge[]> = {};
+for (const e of EDGES) {
+	(EDGES_BY_CITY[e.a] ??= []).push(e);
+	(EDGES_BY_CITY[e.b] ??= []).push(e);
+}
 
 export function edgeExists(e: Edge, year: number) {
 	return (e.from ?? -1e9) <= year && cityExists(CITY[e.a], year, !!e.secret) && cityExists(CITY[e.b], year, !!e.secret);
@@ -418,7 +481,7 @@ function vessel(mode: Mode, year: number, a: City, b: City): { name: string; spe
 		if ((a.id === 'manila' && b.id === 'acapulco') || (a.id === 'acapulco' && b.id === 'manila')) return { name: 'Manila galleon', speed: 130, costPerDay: 0.25 };
 		return { name: byCulture[a.culture] ?? 'merchant ship', speed: 150, costPerDay: 0.35 };
 	}
-	if (mode === 'river') return year >= 1860 ? { name: 'river steamer', speed: 140, costPerDay: 0.5 } : { name: 'river barge', speed: 70, costPerDay: 0.3 };
+	if (mode === 'river') return { name: year >= 1860 ? 'river steamer' : 'river barge', speed: year >= 1860 ? 140 : 70, costPerDay: year >= 1860 ? 0.5 : 0.3 };
 	if (rail) return { name: 'railway', speed: 450, costPerDay: 1.4 };
 	const byCulture: Partial<Record<CultureId, string>> = {
 		han: 'mule cart',
@@ -439,10 +502,10 @@ function vessel(mode: Mode, year: number, a: City, b: City): { name: string; spe
 
 export function routesFrom(cityId: string, year: number, secrets: string[] = []): Route[] {
 	const out: Route[] = [];
-	for (const e of EDGES) {
+	const list = EDGES_BY_CITY[cityId] ?? [];
+	for (const e of list) {
 		if (e.secret && !secrets.includes(e.secret)) continue;
-		const other = e.a === cityId ? e.b : e.b === cityId ? e.a : null;
-		if (!other) continue;
+		const other = e.a === cityId ? e.b : e.a;
 		const a = CITY[cityId];
 		const b = CITY[other];
 		if (!edgeExists(e, year)) continue;
@@ -455,8 +518,13 @@ export function routesFrom(cityId: string, year: number, secrets: string[] = [])
 	return out;
 }
 
+const SHORTEST_DAYS_CACHE = new Map<string, Record<string, number>>();
+
 /** Dijkstra on days — used to size the commission deadline. */
 export function shortestDays(from: string, year: number): Record<string, number> {
+	const key = `${from}:${year}`;
+	const cached = SHORTEST_DAYS_CACHE.get(key);
+	if (cached) return cached;
 	const dist: Record<string, number> = { [from]: 0 };
 	const done = new Set<string>();
 	while (true) {
@@ -469,6 +537,8 @@ export function shortestDays(from: string, year: number): Record<string, number>
 			if (dist[r.to] === undefined || d < dist[r.to]) dist[r.to] = d;
 		}
 	}
+	if (SHORTEST_DAYS_CACHE.size > 2000) SHORTEST_DAYS_CACHE.clear();
+	SHORTEST_DAYS_CACHE.set(key, dist);
 	return dist;
 }
 

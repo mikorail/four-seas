@@ -17,25 +17,28 @@ export interface Venue {
 }
 
 const TINY = new Set(['wudang', 'ise', 'shimoda', 'kandy', 'yakutsk', 'okhotsk', 'petropavlovsk', 'nerchinsk', 'kyakhta', 'mecca', 'shambhala', 'penglai', 'suvarnadvipa', 'waqwaq', 'guam', 'tahiti', 'sitka', 'banda', 'ternate', 'urga', 'perth', 'hobart', 'hakodate', 'gyeongju', 'nara', 'qufu']);
-const BAZAARS = new Set(['guangzhou', 'istanbul', 'isfahan', 'tabriz', 'aleppo', 'cairo', 'delhi', 'agra', 'surat', 'malacca', 'batavia', 'beijing', 'nanjing', 'osaka', 'edo', 'hangzhou', 'suzhou', 'samarkand', 'bukhara', 'kashgar', 'baghdad', 'venice', 'amsterdam', 'london', 'lisbon', 'mexico', 'manila', 'zanzibar', 'muscat', 'hormuz', 'calicut', 'goa', 'macau', 'nagasaki', 'hanseong', 'bombay', 'calcutta', 'hongkong', 'singapore', 'lahore', 'dhaka', 'mocha', 'alexandria', 'damascus', 'athens', 'carthage', 'antioch', 'patna']);
+const BAZAARS = new Set(['guangzhou', 'istanbul', 'isfahan', 'tabriz', 'aleppo', 'cairo', 'delhi', 'agra', 'surat', 'malacca', 'batavia', 'beijing', 'nanjing', 'osaka', 'edo', 'hangzhou', 'suzhou', 'samarkand', 'bukhara', 'kashgar', 'baghdad', 'venice', 'amsterdam', 'london', 'lisbon', 'mexico', 'manila', 'zanzibar', 'muscat', 'hormuz', 'calicut', 'goa', 'macau', 'nagasaki', 'hanseong', 'bombay', 'calcutta', 'hongkong', 'singapore', 'lahore', 'dhaka', 'mocha', 'alexandria', 'damascus', 'athens', 'carthage', 'antioch', 'patna', 'seville', 'paris', 'genoa', 'antwerp', 'hamburg', 'vienna', 'smyrna', 'fez', 'timbuktu', 'kazan', 'baku', 'kokand']);
 const PALACES: Record<string, string> = {
 	beijing: 'The Forbidden City', nanjing: 'The Ming Palace', hanseong: 'Gyeongbokgung Palace', kyoto: 'The Imperial Palace', edo: 'Edo Castle', thanglong: 'The Imperial Citadel', hue: 'The Purple Forbidden City',
 	ayutthaya: 'The Grand Palace of Ayutthaya', bangkok: 'The Grand Palace', ava: 'The Golden Palace of Ava', mandalay: 'Mandalay Palace', pegu: 'Kanbawzathadi Palace', malacca: 'The Sultan’s istana', aceh: 'Dalam Darud Donya',
 	mataram: 'The Kraton', brunei: 'The water palace', ternate: 'The Kedaton', delhi: 'The Red Fort', agra: 'Agra Fort', lahore: 'Lahore Fort', golconda: 'Golconda Fort', hampi: 'The royal enclosure',
 	isfahan: 'Ali Qapu Palace', istanbul: 'Topkapı Palace', cairo: 'The Citadel', lisbon: 'Ribeira Palace', london: 'Whitehall', venice: 'The Doge’s Palace', moscow: 'The Kremlin', lhasa: 'The Potala',
 	kathmandu: 'Hanuman Dhoka', bukhara: 'The Ark', samarkand: 'The Kok Saray', honolulu: 'The royal compound', kabul: 'The Bala Hissar', mexico: 'The Viceregal Palace', lima: 'The Palace of the Viceroy', zanzibar: 'The Sultan’s palace', manila: 'Malacañang', batavia: 'The Governor-General’s house',
-	damascus: 'Qasr al-Azm', athens: 'The Palace of the Voivode', angkor: 'The Royal Palace of Angkor Thom', patna: 'The Mauryan Throne Hall ruins', taxila: 'The Palace of Sirkap', alexandria: 'The Ras el-Tin Palace', carthage: 'Dar el-Bey'
+	damascus: 'Qasr al-Azm', athens: 'The Palace of the Voivode', angkor: 'The Royal Palace of Angkor Thom', patna: 'The Mauryan Throne Hall ruins', taxila: 'The Palace of Sirkap', alexandria: 'The Ras el-Tin Palace', carthage: 'Dar el-Bey',
+	madrid: 'The Royal Alcázar', paris: 'The Palais du Louvre', vienna: 'The Hofburg', prague: 'Prague Castle', krakow: 'Wawel Royal Castle', stpetersburg: 'The Winter Palace', stockholm: 'Tre Kronor Castle', florence: 'Palazzo Vecchio', genoa: 'The Doge’s Palace of Genoa', ragusa: 'The Rector’s Palace', kazan: 'The Kazan Kremlin', baku: 'Palace of the Shirvanshahs', kokand: 'The Palace of Khudayar Khan', algiers: 'The Casbah Dey’s Palace', fez: 'Dar al-Makhzen'
 };
 const ACADEMIES: Record<string, string> = {
 	beijing: 'The Guozijian (Imperial Academy)', nanjing: 'The Nanjing Guozijian', hanseong: 'Sungkyunkwan', kyoto: 'The Kyoto academies', edo: 'The Shōheikō', hangzhou: 'The West Lake academies', suzhou: 'Suzhou’s scholar gardens', qufu: 'The Temple of Confucius school',
 	isfahan: 'The Madrasa of the Shah', istanbul: 'The Süleymaniye madrasas', cairo: 'Al-Azhar', bukhara: 'The Mir-i Arab madrasa', samarkand: 'The Ulugh Beg madrasa', varanasi: 'The pandits of Kashi', delhi: 'The Madrasa-i-Rahimiya',
 	lisbon: 'The University of Coimbra’s envoys', rome: 'The Roman College', venice: 'The University of Padua', london: 'The Royal Society', amsterdam: 'Leiden University', mexico: 'The Royal University of Mexico', lima: 'San Marcos University',
 	goa: 'St Paul’s College', macau: 'St Paul’s College of Macao', nagasaki: 'The Dutch studies school', lhasa: 'Drepung Monastery', kathmandu: 'The pandits of the valley',
-	alexandria: 'The Mouseion & Patriarchal Library', damascus: 'Al-Adiliyah Madrasa', athens: 'The Academy of Athens', patna: 'Nalanda & ancient Ganges viharas', taxila: 'The ancient stone halls of Takshashila', angkor: 'The Royal Library of the God-Kings', antioch: 'The Academy of Antioch'
+	alexandria: 'The Mouseion & Patriarchal Library', damascus: 'Al-Adiliyah Madrasa', athens: 'The Academy of Athens', patna: 'Nalanda & ancient Ganges viharas', taxila: 'The ancient stone halls of Takshashila', angkor: 'The Royal Library of the God-Kings', antioch: 'The Academy of Antioch',
+	paris: 'The Sorbonne', prague: 'The Clementinum & Rudolphine Court', krakow: 'The Jagiellonian Collegium Maius', vienna: 'The University of Vienna', florence: 'The Accademia del Cimento', stpetersburg: 'The Imperial Academy of Sciences', fez: 'Al-Qarawiyyin University', timbuktu: 'Sankore Madrasa'
 };
 const BRIDGES: Record<string, string> = {
 	isfahan: 'Khaju Bridge', suzhou: 'Precious Belt Bridge', kyoto: 'Sanjō Ōhashi', edo: 'Nihonbashi', venice: 'The Rialto', london: 'London Bridge', beijing: 'The Marco Polo Bridge', hangzhou: 'The Broken Bridge',
-	hoian: 'The Japanese Covered Bridge', nagasaki: 'Spectacles Bridge', srinagar: 'The Zaina Kadal', baghdad: 'The bridge of boats', lahore: 'Ravi bridge of boats', chengdu: 'The Anshun Bridge'
+	hoian: 'The Japanese Covered Bridge', nagasaki: 'Spectacles Bridge', srinagar: 'The Zaina Kadal', baghdad: 'The bridge of boats', lahore: 'Ravi bridge of boats', chengdu: 'The Anshun Bridge',
+	florence: 'Ponte Vecchio', prague: 'Charles Bridge', paris: 'Pont Neuf', tbilisi: 'Metekhi Bridge'
 };
 const LANDMARKS: Record<string, { name: string; from?: number; blurb: string; shape?: LandmarkShape }> = {
 	beijing: { name: 'The Great Wall', blurb: 'A stone dragon over the mountains, ten thousand li long.', shape: 'wall' },
@@ -85,7 +88,20 @@ const LANDMARKS: Record<string, { name: string; from?: number; blurb: string; sh
 	patna: { name: 'Ashoka’s Pillars on the Ganges', blurb: 'Polished sandstone carved with ancient edicts of non-violence.', shape: 'stupa' },
 	taxila: { name: 'Dharmarajika Stupa', blurb: 'Ancient stone stupa of Gandharan kings where Buddha’s relics were enshrined.', shape: 'stupa' },
 	antioch: { name: 'The Cave Church of Saint Peter', blurb: 'Carved into the living rock of Mount Silpius where believers first gathered.', shape: 'cave' },
-	carthage: { name: 'The Byrsa Citadel & Punic Ports', blurb: 'Circular harbors where Hannibal’s warships once anchored.', shape: 'wall' }
+	carthage: { name: 'The Byrsa Citadel & Punic Ports', blurb: 'Circular harbors where Hannibal’s warships once anchored.', shape: 'wall' },
+	seville: { name: 'La Giralda & the Alcázar', blurb: 'Almohad brick bell-tower and tiled courtyards where the Indies fleets are blessed.', shape: 'tower' },
+	paris: { name: 'Notre-Dame de Paris', blurb: 'Twin Gothic towers and rose windows rising from an island in the Seine.', shape: 'tower' },
+	florence: { name: 'Brunelleschi’s Dome', blurb: 'Red-tiled octagonal dome of Santa Maria del Fiore, crowning the Tuscan sky.', shape: 'dome' },
+	vienna: { name: 'St. Stephen’s Cathedral', blurb: 'Glazed mosaic roof tiles and the soaring south spire watching over the Danube.', shape: 'tower' },
+	prague: { name: 'The Astronomical Clock of Old Town Square', blurb: 'Gilded dials of sun, moon, and zodiac where mechanical apostles march every hour.', shape: 'tower' },
+	krakow: { name: 'The Cloth Hall & St. Mary’s Basilica', blurb: 'Renaissance arcades in the vast market square where a trumpeter sounds the hour.', shape: 'tower' },
+	stpetersburg: { name: 'The Peter and Paul Fortress', from: 1703, blurb: 'Gilded needle spire rising above the Neva bastions where the Tsars are laid to rest.', shape: 'tower' },
+	ragusa: { name: 'The Walls of Ragusa & Fort Lovrijenac', blurb: 'Limestone curtain walls and sea bastions that never yielded to Venice or the Porte.', shape: 'wall' },
+	baku: { name: 'The Ateshgah Fire Temple & Maiden Tower', blurb: 'Natural gas flames burning in stone altars where Zoroastrian and Hindu pilgrims pray.', shape: 'tower' },
+	merv: { name: 'The Mausoleum of Sultan Sanjar', blurb: 'A turquoise-domed Seljuk cube visible a day’s ride across the Karakum desert.', shape: 'dome' },
+	timbuktu: { name: 'Djinguereber Mosque', blurb: 'Sun-baked earth and bristling palm-wood beams built by Mansa Musa after his Hajj.', shape: 'pyramid' },
+	fez: { name: 'The Chouara Tanneries', blurb: 'Stone vats of saffron, indigo, and poppy dye steaming beneath the medina rooftops.', shape: 'garden' },
+	karakorum: { name: 'Erdene Zuu Monastery', blurb: 'One hundred and eight white stupas raised from the carved stones of the Great Khan’s capital.', shape: 'stupa' }
 };
 
 const SQUARE_NAME: Partial<Record<CultureId, string>> = {

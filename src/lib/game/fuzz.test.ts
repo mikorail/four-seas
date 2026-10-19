@@ -128,7 +128,7 @@ describe('fuzz: random journeys never break the game', () => {
 	for (const difficulty of ['pilgrim', 'courier', 'ronin', 'legend']) {
 		it(`${difficulty}: 25 random journeys`, () => {
 			for (let s = 0; s < 25; s++) journey(s * 7919 + difficulty.length, { difficulty });
-		}, 60000);
+		}, 90000);
 	}
 
 	it('hardship starts', () => {

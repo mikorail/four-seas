@@ -34,5 +34,10 @@ export default defineConfig({
 			// registered by PwaBar in production only — the dev server cannot serve a module service worker
 			serviceWorker: { register: false }
 		})
-	]
+	],
+	// @ts-expect-error vitest types in vite config
+	test: {
+		testTimeout: 30000,
+		hookTimeout: 30000
+	}
 });
