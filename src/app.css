@@ -1,0 +1,242 @@
+:root {
+	--paper: #f2e8d2;
+	--paper-2: #e9dcbf;
+	--card: #fbf5e6;
+	--card-back: #d9c9a6;
+	--card-glow: #fffaf0;
+	--ink: #211b15;
+	--muted: #6f6353;
+	--line: #c9b892;
+	--shadow: rgba(60, 40, 15, 0.22);
+	--vermilion: #b5321f;
+	--jade: #2f6b5a;
+	--gold: #b8902e;
+	--gold-text: #7c5900;
+	--indigo: #2a4a7c;
+	--sea: #d8d3bd;
+	--sea-line: #b9b296;
+	--land: #efe3c6;
+	--seal-1: #e2c9a3;
+	--seal-2: #cfd8c4;
+	--seal-3: #e6c4b5;
+	--seal-4: #c9cfe0;
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-pill: 999px;
+	--display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+	--body: 'EB Garamond', 'Iowan Old Style', Georgia, serif;
+	--cjk: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Songti SC', serif;
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--paper: #17130f;
+		--paper-2: #221c16;
+		--card: #2a221a;
+		--card-back: #1f1913;
+		--card-glow: #3a2f22;
+		--ink: #eadfc6;
+		--muted: #a8997f;
+		--line: #4a3e2f;
+		--shadow: rgba(0, 0, 0, 0.5);
+		--vermilion: #e0583f;
+		--jade: #5fae94;
+		--gold: #d9b45a;
+		--gold-text: #f59e0b;
+		--indigo: #7fa3db;
+		--sea: #1c2226;
+		--sea-line: #2c363b;
+		--land: #2b241b;
+		--seal-1: #4a3a28;
+		--seal-2: #34402f;
+		--seal-3: #4a2f28;
+		--seal-4: #2f3550;
+		color-scheme: dark;
+	}
+}
+:root[data-theme='dark'] {
+	--paper: #17130f;
+	--paper-2: #221c16;
+	--card: #2a221a;
+	--card-back: #1f1913;
+	--card-glow: #3a2f22;
+	--ink: #eadfc6;
+	--muted: #a8997f;
+	--line: #4a3e2f;
+	--shadow: rgba(0, 0, 0, 0.5);
+	--vermilion: #e0583f;
+	--jade: #5fae94;
+	--gold: #d9b45a;
+	--gold-text: #f59e0b;
+	--indigo: #7fa3db;
+	--sea: #1c2226;
+	--sea-line: #2c363b;
+	--land: #2b241b;
+	--seal-1: #4a3a28;
+	--seal-2: #34402f;
+	--seal-3: #4a2f28;
+	--seal-4: #2f3550;
+	color-scheme: dark;
+}
+
+* {
+	box-sizing: border-box;
+}
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+html,
+body {
+	margin: 0;
+	overscroll-behavior: none; /* no pull-to-refresh mid-swipe */
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--body);
+	font-size: 17px;
+	-webkit-font-smoothing: antialiased;
+}
+body {
+	min-height: 100dvh;
+	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+	-webkit-tap-highlight-color: transparent;
+	background-image:
+		radial-gradient(ellipse at top, color-mix(in srgb, var(--card-glow) 60%, transparent), transparent 60%),
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .15 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+button.primary,
+button.ghost {
+	font: inherit;
+	font-size: 1rem;
+	padding: 10px 20px;
+	border-radius: 999px;
+	cursor: pointer;
+	border: 1.5px solid var(--ink);
+}
+button.primary {
+	background: var(--vermilion);
+	border-color: var(--vermilion);
+	color: #fff;
+	font-weight: 600;
+	box-shadow: 0 4px 14px color-mix(in srgb, var(--vermilion) 35%, transparent);
+}
+button.primary:hover {
+	filter: brightness(1.08);
+}
+button.ghost {
+	background: transparent;
+	color: var(--ink);
+}
+button.ghost:hover {
+	background: var(--paper-2);
+}
+button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+:focus-visible {
+	outline: 2px solid var(--vermilion);
+	outline-offset: 2px;
+}
+
+button,
+a,
+input,
+select,
+label {
+	touch-action: manipulation; /* kills double-tap zoom delay */
+}
+@media (display-mode: standalone) {
+	body {
+		user-select: none;
+		-webkit-user-select: none;
+	}
+	input,
+	textarea {
+		user-select: text;
+		-webkit-user-select: text;
+	}
+}
+
+/* ===== culture art styles: set --z-* inline via themeStyle(), add .themed ===== */
+.themed {
+	--vermilion: var(--z-accent);
+	--gold: var(--z-gold);
+	--jade: var(--z-jade);
+	--seal-1: color-mix(in srgb, var(--z-gold) 30%, var(--paper));
+	--seal-2: color-mix(in srgb, var(--z-jade) 26%, var(--paper));
+	--seal-3: color-mix(in srgb, var(--z-accent) 24%, var(--paper));
+	--seal-4: color-mix(in srgb, var(--z-jade) 14%, color-mix(in srgb, var(--z-accent) 14%, var(--paper)));
+	position: relative;
+	transition: --vermilion 0.6s;
+}
+.themed::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: var(--z-pattern);
+	background-size: 44px 44px;
+	opacity: 0.045;
+	mask-image: radial-gradient(ellipse at center, transparent 35%, black 90%);
+	-webkit-mask-image: radial-gradient(ellipse at center, transparent 35%, black 90%);
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) .themed {
+		--vermilion: color-mix(in srgb, var(--z-accent) 70%, #fff);
+		--gold: color-mix(in srgb, var(--z-gold) 75%, #fff);
+		--jade: color-mix(in srgb, var(--z-jade) 60%, #fff);
+		--seal-1: color-mix(in srgb, var(--z-gold) 30%, var(--paper));
+		--seal-2: color-mix(in srgb, var(--z-jade) 34%, var(--paper));
+		--seal-3: color-mix(in srgb, var(--z-accent) 30%, var(--paper));
+	}
+	:root:not([data-theme='light']) .themed::before {
+		opacity: 0.08;
+	}
+}
+
+/* ===== accessibility ===== */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
+}
+:root[data-motion='reduce'] *,
+:root[data-motion='reduce'] *::before,
+:root[data-motion='reduce'] *::after {
+	animation-duration: 0.001ms !important;
+	animation-iteration-count: 1 !important;
+	transition-duration: 0.001ms !important;
+}
+/* Okabe–Ito colorblind-safe accents (override culture themes too) */
+:root[data-cb='1'],
+:root[data-cb='1'] .themed {
+	--vermilion: #d55e00;
+	--jade: #0072b2;
+	--gold: #e69f00;
+	--indigo: #56b4e9;
+}
+:root[data-text='large'] {
+	font-size: 19.5px;
+}
+:root[data-text='large'] body {
+	font-size: 19.5px;
+}

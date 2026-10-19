@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "four-seas", "runtimeExecutable": "./scripts/dev.sh", "runtimeArgs": [], "port": 5193 }
+  ]
+}

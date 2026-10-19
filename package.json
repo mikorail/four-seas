@@ -1,0 +1,52 @@
+{
+	"name": "four-seas",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "./scripts/run-with-nvm.sh vite dev",
+		"build": "./scripts/run-with-nvm.sh vite build",
+		"preview": "./scripts/run-with-nvm.sh vite preview",
+		"prepare": "./scripts/run-with-nvm.sh svelte-kit sync || echo ''",
+		"check": "./scripts/run-with-nvm.sh svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "./scripts/run-with-nvm.sh svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "./scripts/run-with-nvm.sh vitest run",
+		"sim": "./scripts/run-with-nvm.sh tsx scripts/sim.ts",
+		"prebuild": "./scripts/run-with-nvm.sh node scripts/cjk-fonts.mjs && ./scripts/run-with-nvm.sh node scripts/content.mjs",
+		"fonts": "./scripts/run-with-nvm.sh node scripts/cjk-fonts.mjs",
+		"content": "./scripts/run-with-nvm.sh node scripts/content.mjs",
+		"pretest": "./scripts/run-with-nvm.sh node scripts/content.mjs",
+		"e2e": "./scripts/run-with-nvm.sh playwright test",
+		"e2e:monkey": "MONKEY=1 ./scripts/run-with-nvm.sh playwright test e2e/monkey.spec.ts --workers=1"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.64.0",
+		"@sveltejs/adapter-static": "^4.0.0",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^7.2.0",
+		"@types/d3-geo": "^3.1.1",
+		"@types/geojson": "^7946.0.16",
+		"@types/topojson-client": "^3.1.5",
+		"d3-geo": "^3.1.1",
+		"svelte": "^5.57.1",
+		"svelte-check": "^4.6.0",
+		"topojson-client": "^3.1.0",
+		"tsx": "^4.23.15",
+		"typescript": "^6.0.3",
+		"vite": "^8.3.0",
+		"vitest": "^5.0.4",
+		"world-atlas": "^2.0.2"
+	},
+	"imports": {
+		"#lib/components/*": "./src/lib/components/*",
+		"#lib/assets/*": "./src/lib/assets/*",
+		"#lib/*": "./src/lib/*.ts"
+	},
+	"dependencies": {
+		"@anthropic-ai/sdk": "^0.133.0",
+		"@fontsource/cormorant-garamond": "^5.3.0",
+		"@fontsource/eb-garamond": "^5.3.0",
+		"@fontsource/shippori-mincho": "^5.3.0",
+		"zod": "^4.6.6"
+	}
+}
