@@ -342,6 +342,7 @@ export interface Run {
 	restorePoints?: string[]; // serialized snapshots of the last city arrivals
 	undo?: string | null; // snapshot before the last swipe (one per city)
 	warehouse?: Record<string, string[]>; // city → goods stored there
+	guild?: number; // merchant guild rank 0..5 from trade volume
 	graves?: Grave[]; // past travellers' resting places, copied from the Chronicle at the start
 	xp?: Partial<Record<'silver' | 'vigor' | 'renown' | 'fortune' | 'mind', number>>; // experience: how much each stat has moved
 	schema?: number; // save format version (see SCHEMA / MIGRATIONS in engine.ts)
@@ -411,7 +412,7 @@ export interface Letter {
 	to: string; // person name
 	toId?: string; // Person id
 	city: string; // where they live
-	kind: 'friend' | 'sweetheart' | 'patron' | 'family' | 'reply';
+	kind: 'friend' | 'sweetheart' | 'patron' | 'family' | 'rival' | 'reply';
 	sent: number; // day
 	arrives: number; // day the reply can reach you
 	text: string;

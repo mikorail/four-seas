@@ -151,7 +151,7 @@ All milestones complete. Verified with `npm run check` (0 errors), `npm test` (2
 - [x] Bones of the Road: graves and shrines of past travellers, unfinished commissions
 - [x] Storyteller's repertoire; languages learned by living; seasonal trade fairs with auctions; a rival who lives in the same world
 - [x] Lazy-loaded UI (−42% page chunk), smoother globe dragging, ink HUD icons, event sounds
-- [ ] Translate campaign texts into Japanese and Chinese (Indonesian titles/blurbs done)
+- [x] Translate campaign texts into Japanese and Chinese (Indonesian, Japanese, and Chinese titles/blurbs for all 15 campaigns)
 
 ## Milestone M — A whole life (2026-10-17)
 - [x] 17 life skills with levels, perks and skill-check road events
@@ -159,41 +159,41 @@ All milestones complete. Verified with `npm run check` (0 errors), `npm test` (2
 - [x] Life goals; contraband, stolen goods and intel that move rebellions
 - [x] Letters, a home, ageing, titles, collections; companion stories and dilemmas
 - [x] Undo/rewind, route planner, news toast, photo mode, quick-sell, price memory, journal search, colourblind globe, map weather
-- [ ] Guild rank + warehouse (`run.warehouse` unused)
+- [x] Guild rank + warehouse (`run.warehouse` across up to 3 cities, shipping, rank 0–5, guild cards)
 - [ ] Shared daily ghosts (needs a backend)
 
 ## Next: prioritized TODO (proposed 2026-10-19)
 Sizes: S = an hour or two, M = a day, L = several days. Ready-made agent prompts are in `docs/AGENT_PROMPTS.md`.
 
 ### P1 · Foundation (protects everything else)
-- [ ] **First git commit** (S): `main` has no commits yet; nothing is recoverable. Commit, then work in branches/worktrees (see `AGENTS.md`).
-- [ ] **Save size guard** (M): a save holds the run plus `undo` plus 3 `restorePoints` (≈4 copies; measured 200 KB avg, 420 KB worst on short runs). Long dynasty runs can hit the ~5 MB `localStorage` limit and fail silently. Trim `log` in snapshots to the last 40 entries, compress with `fflate` (new dep; Realmforge uses it), catch `QuotaExceededError` and show a toast.
-- [ ] **Split `engine.ts`** (~1.9k lines, L): move arrival, choose/outcome, endings, saves/migrations and undo into `game/engine/*.ts` behind the same exports. Land alone before feature work.
+- [x] **First git commit** (S): `main` has no commits yet; nothing is recoverable. Commit, then work in branches/worktrees (see `AGENTS.md`).
+- [x] **Save size guard** (M): a save holds the run plus `undo` plus 3 `restorePoints` (≈4 copies; measured 200 KB avg, 420 KB worst on short runs). Long dynasty runs can hit the ~5 MB `localStorage` limit and fail silently. Trim `log` in snapshots to the last 40 entries, compress with `fflate` (new dep; Realmforge uses it), catch `QuotaExceededError` and show a toast.
+- [x] **Split `engine.ts`** (~1.9k lines, L): move arrival, choose/outcome, endings, saves/migrations and undo into `game/engine/*.ts` behind the same exports. Land alone before feature work.
 - [ ] **Split `+page.svelte`** (~1.7k) and `Drawer.svelte` (~1.3k) (M): one component per drawer tab (`drawer/Self.svelte`, …) and a `Hud.svelte`.
-- [ ] **Deploy config** (S): `netlify.toml` (Node 24, SPA fallback `/200.html`, `no-cache` for `service-worker.js`), like Realmforge.
+- [x] **Deploy config** (S): `netlify.toml` (Node 24, SPA fallback `/200.html`, `no-cache` for `service-worker.js`), like Realmforge.
 
 ### P2 · Depth that is half-built
-- [ ] **Guild rank + warehouse** (M): `run.warehouse` exists but is unused. Rank 0–5 per guild from trade volume; warehouses in up to 3 cities store goods; buy low, ship, sell high; rank unlocks contracts and discounts.
-- [ ] **Letters with consequences** (S): replies currently give a mood or a gift. Let friends send quests, warnings about the rival, or money; a sweetheart letter can trigger the proposal beat.
+- [x] **Guild rank + warehouse** (M): `run.warehouse` exists but is unused. Rank 0–5 per guild from trade volume; warehouses in up to 3 cities store goods; buy low, ship, sell high; rank unlocks contracts and discounts.
+- [x] **Letters with consequences** (S): replies currently give a mood or a gift. Let friends send quests, warnings about the rival, or money; a sweetheart letter can trigger the proposal beat.
 - [ ] **Skill mini-games** (M): reuse `components/games/*` for skill checks (puzzles → lock riddle, martial → timing, art → tracing).
-- [ ] **Rival as a person** (S): rival appears in People with bond, can become friend or nemesis; letters to the rival.
-- [ ] **Goal endings** (S): finishing a life goal offers a unique "retire into it" epilogue (bard opens a story house, thief retires rich…).
+- [x] **Rival as a person** (S): rival appears in People with bond, can become friend or nemesis; letters to the rival.
+- [x] **Goal endings** (S): finishing a life goal offers a unique "retire into it" epilogue (bard opens a story house, thief retires rich…).
 
 ### P3 · Content
-- [ ] **Japanese and Chinese campaign texts** (M): titles, blurbs, then card text; keep CJK fonts regenerated (`npm run fonts`).
-- [ ] **New campaigns** (M each): Imjin War 1592 (Korean/Japanese sides), Opium War 1839 (Canton), Shimabara 1637, Meiji Restoration 1868, Tea-Horse Road. Use `src/content/campaigns/*.md` and check them in `scripts/campaign-sim.ts`.
+- [x] **Japanese and Chinese campaign texts** (M): titles, blurbs, then card text; keep CJK fonts regenerated (`npm run fonts`).
+- [x] **New campaigns** (M each): Imjin War 1592 (Korean/Japanese sides), Opium War 1839 (Canton), Shimabara 1637, Meiji Restoration 1868, Tea-Horse Road. Use `src/content/campaigns/*.md` and check them in `scripts/campaign-sim.ts`.
 - [ ] **Per-culture quests** (M): 2+ quest lines per culture with their own items and places (as Realmforge's sphere quests).
 - [ ] **More profession beats** (S each): new professions have 3 beats; grow the most played ones to 5 with an ending.
 
 ### P4 · Balance
-- [ ] **Per-profession and per-goal sim** (S): `scripts/sim.ts` reporting win rate by profession and goal completion rate; flag outliers (>±10% from mean).
-- [ ] **Skill inflation check** (S): average skill level at day 300; make sure level 6+ perks do not trivialise legend.
+- [x] **Per-profession and per-goal sim** (S): `scripts/sim.ts` reporting win rate by profession and goal completion rate; flag outliers (>±10% from mean).
+- [x] **Skill inflation check** (S): average skill level at day 300; make sure level 6+ perks do not trivialise legend.
 - [ ] **Economy pass** (M): silver curve over a long journey with home garden, fences and fairs; contraband should be tempting, not dominant.
 
 ### P5 · UX
 - [ ] **First-journey tutorial** (M): a short guided campaign that teaches swipe, routes, venues, bag in 10 cards instead of tips alone.
-- [ ] **Keyboard play** (S): ←/→/↑ to swipe, number keys for routes, `J` journal, `Esc` closes; show hints on focus.
-- [ ] **Contrast and focus audit** (S): check panel text and chips against WCAG AA in all culture themes; visible focus rings.
+- [x] **Keyboard play** (S): ←/→/↑ to swipe, number keys for routes, `J` journal, `Esc` closes; show hints on focus.
+- [x] **Contrast and focus audit** (S): check panel text and chips against WCAG AA in all culture themes; visible focus rings.
 - [ ] **Phone panel** (S): drag handle on the bottom sheet to expand/collapse; remember height.
 
 ### P6 · Performance & size

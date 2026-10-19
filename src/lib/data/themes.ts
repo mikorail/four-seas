@@ -27,21 +27,47 @@ const kapa = (c: string) => svg(`<path d='M0 12l6-10 6 10 6-10 6 10M0 24l6-10 6 
 const hatch = (c: string) => svg(`<path d='M0 24L24 0M-6 6L6-6M18 30L30 18M0 12L12 0M12 24L24 12' stroke='${c}' stroke-width='0.9'/>`); // engraving
 
 export const THEMES: Record<CultureId, Theme> = {
-	han: { name: 'Ink & Cinnabar', accent: '#b5321f', gold: '#b8902e', jade: '#2f6b5a', tile: fret },
-	japanese: { name: 'Sumi & Indigo', accent: '#a23b3b', gold: '#9c7a3c', jade: '#2e4f7f', tile: seigaiha },
-	korean: { name: 'Obangsaek', accent: '#c0392b', gold: '#d39a1f', jade: '#2b6cb0', tile: dancheong },
-	viet: { name: 'Lotus & Lacquer', accent: '#a8322d', gold: '#c9a227', jade: '#3c7a4e', tile: lotus },
-	siamese: { name: 'Gilded Lacquer', accent: '#a8282a', gold: '#c99a10', jade: '#1f6f78', tile: kanok },
-	malay: { name: 'Batik Sogan', accent: '#8b4a2b', gold: '#b88a2e', jade: '#2f5d50', tile: kawung },
-	indian: { name: 'Mughal Saffron', accent: '#c75b12', gold: '#b88a1c', jade: '#2e7d5b', tile: jali },
-	tibetan: { name: 'Thangka', accent: '#8b1e1e', gold: '#d08a12', jade: '#2b4c7e', tile: knot },
-	steppe: { name: 'Felt & Horse', accent: '#a33b2a', gold: '#b5651d', jade: '#2a7f62', tile: zigzag },
-	persian: { name: 'Turquoise Tile', accent: '#1b6ca8', gold: '#b8902e', jade: '#0e8f8f', tile: girih },
-	ottoman: { name: 'İznik', accent: '#b22d2d', gold: '#b8923e', jade: '#1f5f9f', tile: iznik },
-	swahili: { name: 'Coral & Indigo', accent: '#c4572e', gold: '#c99236', jade: '#1f4e79', tile: chevron },
-	pacific: { name: 'Kapa Cloth', accent: '#8c3b1e', gold: '#c4902a', jade: '#1f5f5b', tile: kapa },
-	european: { name: 'Copperplate', accent: '#7a2e2e', gold: '#9c7a3c', jade: '#2f4f4f', tile: hatch }
+	han: { name: 'Ink & Cinnabar', accent: '#a82d1b', gold: '#7a5900', jade: '#265c4d', tile: fret },
+	japanese: { name: 'Sumi & Indigo', accent: '#963232', gold: '#735722', jade: '#2e4f7f', tile: seigaiha },
+	korean: { name: 'Obangsaek', accent: '#a32c20', gold: '#78560a', jade: '#215891', tile: dancheong },
+	viet: { name: 'Lotus & Lacquer', accent: '#9c2c27', gold: '#75590c', jade: '#2c613b', tile: lotus },
+	siamese: { name: 'Gilded Lacquer', accent: '#9e2426', gold: '#785806', jade: '#185c63', tile: kanok },
+	malay: { name: 'Batik Sogan', accent: '#8b4a2b', gold: '#785516', jade: '#2f5d50', tile: kawung },
+	indian: { name: 'Mughal Saffron', accent: '#994208', gold: '#78550e', jade: '#226146', tile: jali },
+	tibetan: { name: 'Thangka', accent: '#8b1e1e', gold: '#7a4f08', jade: '#2b4c7e', tile: knot },
+	steppe: { name: 'Felt & Horse', accent: '#963424', gold: '#7d4310', jade: '#1e614a', tile: zigzag },
+	persian: { name: 'Turquoise Tile', accent: '#15588a', gold: '#7a5900', jade: '#0b6363', tile: girih },
+	ottoman: { name: 'İznik', accent: '#9e2626', gold: '#75581c', jade: '#1b538a', tile: iznik },
+	swahili: { name: 'Coral & Indigo', accent: '#993d1b', gold: '#785216', jade: '#1f4e79', tile: chevron },
+	pacific: { name: 'Kapa Cloth', accent: '#8c3b1e', gold: '#785312', jade: '#1f5f5b', tile: kapa },
+	european: { name: 'Copperplate', accent: '#7a2e2e', gold: '#705524', jade: '#2f4f4f', tile: hatch }
 };
+
+/** Compute WCAG 2.1 relative luminance for a 3- or 6-digit hex color string. */
+export function luminance(hex: string): number {
+	const clean = hex.replace(/^#/, '').trim();
+	const full =
+		clean.length === 3
+			? clean
+					.split('')
+					.map((ch) => ch + ch)
+					.join('')
+			: clean;
+	const r = parseInt(full.slice(0, 2), 16) / 255;
+	const g = parseInt(full.slice(2, 4), 16) / 255;
+	const b = parseInt(full.slice(4, 6), 16) / 255;
+	const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+	return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+}
+
+/** Compute WCAG 2.1 contrast ratio (1..21) between two hex colors. */
+export function contrastRatio(hex1: string, hex2: string): number {
+	const l1 = luminance(hex1);
+	const l2 = luminance(hex2);
+	const lighter = Math.max(l1, l2);
+	const darker = Math.min(l1, l2);
+	return (lighter + 0.05) / (darker + 0.05);
+}
 
 const uri = (s: string) => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
 
@@ -51,6 +77,7 @@ export function themeStyle(c: CultureId): string {
 	return [
 		`--z-accent:${t.accent}`,
 		`--z-gold:${t.gold}`,
+		`--z-gold-text:${t.gold}`,
 		`--z-jade:${t.jade}`,
 		`--z-pattern:${uri(t.tile(t.accent))}`,
 		`--z-pattern-gold:${uri(t.tile(t.gold))}`

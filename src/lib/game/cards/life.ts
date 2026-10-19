@@ -21,21 +21,62 @@ export const LIFE_T: Template[] = [
 			const here = cityName(CITY[l.city] ?? c.city, c.year);
 			const sec = c.rng.chance(0.35) ? nearSecret(c, 4) : undefined;
 			const gift = c.rng.pick(GIFTS.filter((id) => ITEMS[id]));
+			const canPropose = l.kind === 'sweetheart' && c.run.romance?.status === 'courting' && (c.run.romance.affection ?? 0) >= 60;
+			const rivalP = l.kind === 'rival' ? (c.run.people ?? []).find((x) => x.id === l.toId || x.npc.name === from) : undefined;
 			const body =
 				l.kind === 'sweetheart'
-					? `“Every evening I walk to the harbour in ${here} and pretend your ship is the next one. Come back to me.”`
-					: l.kind === 'patron'
-						? `“We have your report. Make haste — and trust no one who asks about what you carry.”`
-						: l.kind === 'family'
-							? `“The family is well. The roof leaks. Grandmother says you were always the restless one, and she is proud of you.”`
-							: c.rng.pick([`“I read your letter three times. ${here} is quiet without you.”`, `“You will not believe what happened in ${here} after you left.”`, `“Nothing much changes here — except me, a little. Write again.”`]);
+					? canPropose
+						? `“Every evening I walk to the harbour in ${here} and watch for your sails. Inside the envelope is a red cord. When your road ends, come home and marry me.”`
+						: `“Every evening I walk to the harbour in ${here} and pretend your ship is the next one. Come back to me.”`
+					: l.kind === 'rival'
+						? `“Your letter caught me at the relay post in ${here}. My horse is faster than yours, my maps are better, and the tea here is terrible. Do not fall behind.”`
+						: l.kind === 'patron'
+							? `“We have your report. Make haste, and trust no one who asks about what you carry.”`
+							: l.kind === 'family'
+								? `“The family is well. The roof leaks. Grandmother says you were always the restless one, and she is proud of you.”`
+								: c.rng.pick([
+										`“I read your letter three times. ${here} is quiet without you, and I enclosed a few coins and a warning about your rival’s route.”`,
+										`“You will not believe what happened in ${here} after you left. If your road brings you back this way, I have a small errand that pays well.”`,
+										`“Nothing much changes here, except me, a little. Write again.”`
+									]);
+			const leftChoice =
+				l.kind === 'sweetheart'
+					? ch('Read it twice and keep it close', { fortune: 4 }, { tags: ['rest', 'romance'], setFlag: read, romance: { affection: 10 }, ...(sec ? { bump: { ['hint:' + sec.id]: 1 } } : {}), text: 'Some letters weigh nothing and carry everything.' })
+					: l.kind === 'rival'
+						? ch('Write back with a fair warning about the roads ahead', { fortune: 6, vigor: 4 }, { tags: ['loyal', 'talk'], setFlag: read, rivalDelay: -1, person: rivalP ? { profile: rivalP, bond: 18, stage: rivalP.bond + 18 >= 25 ? 'friend' : undefined } : undefined, text: 'Even rivals share word of washed-out bridges.' })
+						: l.kind === 'friend' && c.run.stats.silver < 35
+							? ch('Accept the emergency silver and rival tip inside', { silver: 12, fortune: 4 }, { tags: ['loyal'], setFlag: read, rivalDelay: 4, text: 'A true friend knows when your purse is light and watches the road for you.' })
+							: ch('Read it twice and head the warning about your rival', { fortune: 4 }, { tags: ['rest', 'loyal'], setFlag: read, rivalDelay: l.kind === 'friend' ? 4 : 0, ...(sec ? { bump: { ['hint:' + sec.id]: 1 } } : {}), text: 'Some letters weigh nothing and carry everything.' });
+			const rightChoice =
+				canPropose
+					? ch('Tie the red cord to your wrist and accept their vow', { fortune: 8, renown: 4 }, { tags: ['romance', 'loyal'], setFlag: read, romance: { affection: 15, status: 'betrothed' }, text: `Across a hundred leagues of road, you and ${from} are betrothed.` })
+					: l.kind === 'rival'
+						? ch('Send back a friendly wager on the finish line', { renown: 6 }, { tags: ['talk'], setFlag: read, person: rivalP ? { profile: rivalP, bond: 10 } : undefined, text: 'A race is better when the other runner is worth beating.' })
+						: l.kind === 'friend' && c.run.quests.length < 4 && l.city !== c.city.id
+							? ch(`Take on ${from.split(' ')[0]}’s errand in ${here}`, { renown: 3 }, {
+									tags: ['loyal'],
+									setFlag: read,
+									quest: {
+										id: 'letter-q-' + l.id,
+										kind: 'message',
+										title: `Bring word to ${from} in ${here}`,
+										giver: from,
+										from: c.city.id,
+										to: l.city,
+										due: c.run.day + 160,
+										reward: { silver: 18, renown: 8 },
+										text: `${from} meets you at the gate with a warm meal and a heavy purse.`
+									},
+									text: `You mark ${here} on your map.`
+								})
+							: ch('Open the parcel that came with it', {}, { tags: ['loyal'], setFlag: read, itemAdd: [gift], text: `Wrapped in their handwriting: ${ITEMS[gift].name.toLowerCase()}.` });
 			return {
 				id: 'letter-reply',
 				npc: n,
 				badge: '✉️ Letter',
 				text: `**${n.name}** runs up, out of breath, with a letter that has followed you across ${c.rng.int(2, 6)} cities. It is from **${from}** in ${here}: ${body}${sec ? ` In the margin, almost as an afterthought: “a carter here swears that ${sec.hint}.”` : ''}`,
-				left: ch('Read it twice and keep it close', { fortune: 4 }, { tags: ['rest', l.kind === 'sweetheart' ? 'romance' : 'loyal'], setFlag: read, romance: l.kind === 'sweetheart' ? { affection: 10 } : undefined, ...(sec ? { bump: { ['hint:' + sec.id]: 1 } } : {}), text: 'Some letters weigh nothing and carry everything.' }),
-				right: ch('Open the parcel that came with it', {}, { tags: ['loyal'], setFlag: read, itemAdd: [gift], text: `Wrapped in their handwriting: ${ITEMS[gift].name.toLowerCase()}.` }),
+				left: leftChoice,
+				right: rightChoice,
 				up: skill(c, 'creativity') >= 3 ? up(`Creativity ${skill(c, 'creativity')}`, 'Write back with a poem that will make them laugh', { renown: 4, fortune: 6 }, { tags: ['art'], setFlag: read, text: 'You can almost hear them laughing from here.' }) : undefined
 			};
 		}

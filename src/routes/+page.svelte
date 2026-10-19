@@ -90,6 +90,7 @@
 	import type { Hero, Run } from '#lib/game/types';
 	import { FAITHS } from '#lib/data/faiths';
 	import { themeStyle } from '#lib/data/themes';
+	import { handleGameKey } from '#lib/keys.svelte';
 
 	let screen = $state<'title' | 'create' | 'game' | 'chronicle'>('title');
 	let run = $state<Run | null>(null);
@@ -453,9 +454,63 @@
 		return m;
 	});
 	const dressRec = $derived(run ? getDressRecommendation(run) : null);
+	let saveToast = $state('');
+	$effect(() => {
+		const onToast = (e: Event) => {
+			const msg = (e as CustomEvent<string>).detail;
+			if (msg) {
+				saveToast = msg;
+				setTimeout(() => {
+					if (saveToast === msg) saveToast = '';
+				}, 5000);
+			}
+		};
+		window.addEventListener('four-seas:toast', onToast);
+		return () => window.removeEventListener('four-seas:toast', onToast);
+	});
 </script>
 
-<svelte:window onkeydown={(e) => { if (e.key === 'Escape') { photo = false; settings = false; drawer = false; market = false; riddle = null; peopleVenue = null; codex = false; } else if (outcome && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); dismissOutcome(); } }} />
+<svelte:window
+	onkeydown={(e) =>
+		handleGameKey(e, {
+			hasModal: () => Boolean(photo || settings || drawer || market || riddle || peopleVenue || codex),
+			closeModal: () => {
+				photo = false;
+				settings = false;
+				drawer = false;
+				market = false;
+				riddle = null;
+				peopleVenue = null;
+				codex = false;
+			},
+			hasOutcome: () => Boolean(outcome),
+			dismissOutcome,
+			canSwipe: () => Boolean(screen === 'game' && run && card && !outcome && !minigame),
+			hasUp: () => Boolean(card?.up),
+			swipe: (dir) => onchoose(dir),
+			inMap: () => Boolean(screen === 'game' && run?.phase === 'map' && !outcome),
+			selectRoute: (idx) => {
+				const r = routes[idx];
+				if (!r) return;
+				if (selected === r.to && Boolean(r.air) === selAir) go();
+				else {
+					selected = r.to;
+					selAir = Boolean(r.air);
+				}
+			},
+			toggleTab: (tab) => {
+				if (screen !== 'game' || !run) return;
+				if (drawer && drawerTab === tab) drawer = false;
+				else {
+					drawerTab = tab;
+					drawer = true;
+				}
+			},
+			undo: () => {
+				if (screen === 'game' && run && canUndo(run)) undo();
+			}
+		})}
+/>
 
 {#if screen === 'title'}
 	<main class="title">
@@ -493,6 +548,7 @@
 				</div>
 			{/if}
 			{#if news}<button class="newstoast" onclick={() => (newsSeen = news!.key)} title="Dismiss">{news.text}</button>{/if}
+			{#if saveToast}<button class="newstoast" onclick={() => (saveToast = '')} title="Dismiss">{saveToast}</button>{/if}
 			{#if mapViewMode === 'globe'}
 				<WorldMap
 					{run}

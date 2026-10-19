@@ -1,4 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
+import { strFromU8, unzlibSync } from 'fflate';
+
+function decodeSave(raw: string | null) {
+	if (!raw) return null;
+	const trimmed = raw.trim();
+	if (trimmed.startsWith('{')) return JSON.parse(trimmed);
+	const bin = atob(trimmed);
+	const bytes = new Uint8Array(bin.length);
+	for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+	return JSON.parse(strFromU8(unzlibSync(bytes)));
+}
 
 async function fresh(page: Page) {
 	await page.goto('/');
@@ -102,7 +113,7 @@ test('character creator with traits, difficulty and a campaign', async ({ page }
 	await page.getByRole('button', { name: /Rōnin/ }).click();
 	await page.getByRole('button', { name: /Set out/ }).click();
 	await expect(page.locator('.text')).toContainText(/Dutch|warning|entrusts/);
-	const save = await page.evaluate(() => JSON.parse(localStorage.getItem('four-seas:run') ?? '{}'));
+	const save = decodeSave(await page.evaluate(() => localStorage.getItem('four-seas:run')));
 	expect(save.flags.campaign).toBe('opening-of-japan');
 	expect(save.difficulty).toBe('ronin');
 	expect(save.location).toBe('nagasaki');
@@ -123,6 +134,20 @@ test('drawer tabs, settings and translation', async ({ page }) => {
 	await page.getByRole('button', { name: 'キャンセル' }).click();
 	await expect(page.getByRole('button', { name: /新しい旅/ })).toBeVisible();
 	expect(await page.evaluate(() => localStorage.getItem('four-seas:lang'))).toBe('ja');
+});
+
+test('keyboard play: ArrowRight swipes card, J opens journal, Escape closes drawer', async ({ page }) => {
+	await fresh(page);
+	await page.getByRole('button', { name: /Daily journey/ }).click();
+	await expect(page.locator('.card')).toBeVisible();
+	await page.keyboard.press('ArrowRight');
+	const save = decodeSave(await page.evaluate(() => localStorage.getItem('four-seas:run')));
+	expect(save.cardsSeen).toBeGreaterThanOrEqual(1);
+	await page.keyboard.press('j');
+	await expect(page.locator('.drawer')).toBeVisible();
+	await expect(page.locator('.drawer')).toContainText('Seed');
+	await page.keyboard.press('Escape');
+	await expect(page.locator('.drawer')).toHaveCount(0);
 });
 
 test('card editor previews Markdown and reports mistakes', async ({ page }) => {

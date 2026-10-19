@@ -1,4 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
+import { strFromU8, unzlibSync } from 'fflate';
+
+function decodeSave(raw: string | null) {
+	if (!raw) return null;
+	const trimmed = raw.trim();
+	if (trimmed.startsWith('{')) return JSON.parse(trimmed);
+	const bin = atob(trimmed);
+	const bytes = new Uint8Array(bin.length);
+	for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+	return JSON.parse(strFromU8(unzlibSync(bytes)));
+}
 
 // Random play through the real UI. Any uncaught error or console error fails the test.
 const SAFE = [
@@ -60,15 +71,14 @@ for (const seed of [1, 2, 3]) {
 		await page.reload();
 		await page.getByRole('button', { name: /Daily journey/ }).click();
 		await monkey(page, 500, seed * 7919);
-		const progress = await page.evaluate(() => {
-			const r = JSON.parse(localStorage.getItem('four-seas:run') ?? 'null');
-			const c = JSON.parse(localStorage.getItem('four-seas:chronicle') ?? 'null');
-			return { cards: r?.cardsSeen ?? 0, day: r?.day ?? 0, runs: c?.runs ?? 0 };
-		});
+		const rawRun = await page.evaluate(() => localStorage.getItem('four-seas:run'));
+		const r = decodeSave(rawRun);
+		const c = await page.evaluate(() => JSON.parse(localStorage.getItem('four-seas:chronicle') ?? 'null'));
+		const progress = { cards: r?.cardsSeen ?? 0, day: r?.day ?? 0, runs: c?.runs ?? 0 };
 		console.log(`monkey ${seed}:`, JSON.stringify(progress));
 		if (progress.cards < 15) {
 			await page.screenshot({ path: `test-results/stuck-${seed}-${test.info().project.name}.png` });
-			console.log('state', JSON.stringify(await page.evaluate(() => { const r = JSON.parse(localStorage.getItem('four-seas:run') ?? 'null'); return { phase: r?.phase, deck: r?.deck?.length, top: r?.deck?.[0]?.id, loc: r?.location, route: r?.route?.to, ending: r?.ending?.kind, energy: r?.energy }; })));
+			console.log('state', JSON.stringify({ phase: r?.phase, deck: r?.deck?.length, top: r?.deck?.[0]?.id, loc: r?.location, route: r?.route?.to, ending: r?.ending?.kind, energy: r?.energy }));
 			console.log('visible', JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.panel button')].filter((b) => (b as HTMLElement).offsetParent).slice(0, 25).map((b) => (b.textContent ?? '').trim().slice(0, 30) + ((b as HTMLButtonElement).disabled ? '[x]' : '')))));
 		}
 		expect(progress.cards + progress.runs * 20).toBeGreaterThan(15); // finishing a journey counts as progress

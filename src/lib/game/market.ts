@@ -17,6 +17,7 @@ import { dateOf, festivalsOn } from './calendar';
 import { isWarZone } from './events';
 import { getTimeInfo } from './time';
 import { culturalStanding } from './mods';
+import { guildDiscount, recordGuildTrade } from './guild';
 import type { Run } from './types';
 
 export function isNightMarket(run: Run): boolean {
@@ -238,6 +239,9 @@ export const priceOf = (run: Run, id: string) => {
 		mult *= 0.85;
 	}
 
+	// Guild rank discount
+	mult *= 1 - guildDiscount(run);
+
 	return Math.max(1, Math.round(base * mult));
 };
 
@@ -264,6 +268,7 @@ export function buy(run: Run, id: string): string | null {
 		if (!addItem(run, id)) return 'No room in your bag.';
 		run.stats.silver -= p;
 		recordPurchase(run, id);
+		recordGuildTrade(run, p);
 		wear(run, id);
 		return null;
 	}
@@ -272,6 +277,7 @@ export function buy(run: Run, id: string): string | null {
 		if (!sec) return 'Unknown chart.';
 		run.stats.silver -= p;
 		recordPurchase(run, id);
+		recordGuildTrade(run, p);
 		run.flags['secret:' + sec.id] = true;
 		log(run, `Bought a chart: ${sec.name}.`);
 		return null;
@@ -279,6 +285,7 @@ export function buy(run: Run, id: string): string | null {
 	if (!addItem(run, id)) return 'No room in your bag.';
 	run.stats.silver -= p;
 	recordPurchase(run, id);
+	recordGuildTrade(run, p);
 	log(run, `Bought ${ITEMS[id]?.name.toLowerCase() ?? id} in ${cityName(CITY[run.location], run.year)}.`);
 	return null;
 }
@@ -295,6 +302,7 @@ export function sell(run: Run, id: string): number {
 	if (run.outfit?.id === id) wear(run, 'none');
 	removeItem(run, id);
 	run.stats.silver = Math.min(capOf(run, 'silver') - 1, run.stats.silver + v);
+	recordGuildTrade(run, v);
 	const c = CURIO[id];
 	if (c && c.prized.includes(CITY[run.location].culture)) log(run, `Sold the ${c.name.toLowerCase()} to a delighted collector for ${v} silver.`);
 	else if (OUTFITS[id]) log(run, `Sold the ${OUTFITS[id].name.toLowerCase()} for ${v} silver.`);

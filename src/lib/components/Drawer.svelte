@@ -29,12 +29,13 @@
 	import { SKILLS, levelOf, xpFor } from '#lib/data/skills';
 	import { GOAL } from '#lib/data/goals';
 	import { COLLECTIONS, STAGE_LABEL, ageOf, lettersInFlight, lifeStage, sendLetter, stash } from '#lib/game/life';
-	import { forgetThought, internalize, restorePointsOf } from '#lib/game/engine';
+	import { forgetThought, internalize, restorePointsOf, retireIntoGoal } from '#lib/game/engine';
 	import { downloadJournalBook } from '#lib/journal-book';
 	import { INVENTIONS } from '#lib/data/inventions';
 	import { culturalStanding } from '#lib/game/mods';
 	import { defaultTraitsForRole, TASK_INFO, type CompanionTask } from '#lib/game/companions';
 	import { assignCompanionTask } from '#lib/game/engine';
+	import { canStore, guildDiscount, guildRank, guildTitle, guildVolume, retrieve, shipTo, store, warehouseAt, warehouseCapacity, warehouseCities } from '#lib/game/guild';
 
 	let {
 		run,
@@ -74,6 +75,7 @@
 	const locked = $derived(run.phase === 'end');
 	let jq = $state('');
 	let letterMsg = $state('');
+	let warehouseMsg = $state('');
 	// the best price you have seen for each good, from your trader's memory
 	const memBest = $derived.by(() => {
 		const best: Record<string, { good: string; city: string; price: number; day: number }> = {};
@@ -83,7 +85,7 @@
 		}
 		return Object.values(best).sort((a, b) => b.price - a.price).slice(0, 10);
 	});
-	function write(to: { name: string; id?: string; city: string; kind: 'friend' | 'sweetheart' | 'patron' | 'family' }) {
+	function write(to: { name: string; id?: string; city: string; kind: 'friend' | 'sweetheart' | 'patron' | 'family' | 'rival' }) {
 		const l = sendLetter(run, to, '');
 		letterMsg = l ? `Letter sent to ${to.name}. A reply may reach you around day ${l.arrives}.` : 'You cannot afford the post.';
 	}
@@ -194,6 +196,9 @@
 					<small>{gl.desc}</small>
 					<span class="meter"><i style:width="{Math.min(100, (pr[0] / pr[1]) * 100)}%"></i></span>
 					<small>{run.goal.done !== undefined ? `Fulfilled on day ${run.goal.done}.` : `${Math.min(pr[0], pr[1])} / ${pr[1]}`}</small>
+					{#if run.goal.done !== undefined && !locked && (run.phase === 'map' || run.phase === 'city')}
+						<button class="mini" style="margin-top:6px;align-self:flex-start" onclick={() => { if (retireIntoGoal(run)) onclose(); }}>🌟 Fulfill life goal & retire</button>
+					{/if}
 				</div>
 			{/if}
 		</section>
@@ -432,7 +437,7 @@
 								<small>{pp.npc.title} in {cityName(CITY[pp.city], run.year)} · {pp.traits.map((x) => PERK[x]?.name).filter(Boolean).join(', ')}</small>
 								<span class="meter loy" title="Bond {pp.bond}"><i style:width="{Math.max(0, pp.bond)}%" class:low={pp.bond < 0}></i></span>
 							</span>
-							{#if !locked && pp.stage !== 'rival'}<button class="ghosty" title="Write to {pp.npc.name} (1 silver)" onclick={() => write({ name: pp.npc.name, id: pp.id, city: pp.city, kind: pp.stage === 'sweetheart' ? 'sweetheart' : 'friend' })}>✉</button>{/if}
+							{#if !locked}<button class="ghosty" title="Write to {pp.npc.name} (1 silver)" onclick={() => write({ name: pp.npc.name, id: pp.id, city: pp.city, kind: pp.stage === 'sweetheart' ? 'sweetheart' : pp.stage === 'rival' ? 'rival' : 'friend' })}>✉</button>{/if}
 						</li>
 					{/each}
 				</ul>
@@ -520,6 +525,52 @@
 					<button class="mini" onclick={() => onbank(-10)} disabled={run.treasury < 1 || run.stats.silver >= 90}>Withdraw 10</button>
 				</div>
 			{:else}<p class="muted small">Banking is possible in cities only.</p>{/if}
+		</section>
+		<section>
+			<h4>🏪 {t('Warehouse')} · {t('Guild rank')} {guildRank(run)}/5</h4>
+			<p class="small"><b>{guildTitle(run)}</b> · {guildVolume(run)} silver traded{guildDiscount(run) > 0 ? ` · ${Math.round(guildDiscount(run) * 100)}% guild discount` : ''}</p>
+			{#if warehouseMsg}<p class="small">{warehouseMsg}</p>{/if}
+			<p class="muted small">Store cargo and supplies in up to 3 cities ({warehouseCapacity(run)} slots per city), retrieve them when here, or pay factors to ship them ahead.</p>
+			{#if !locked && (run.phase === 'map' || run.phase === 'city') && run.bag.length}
+				<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:8px">
+					{#each run.bag as id, i (id + i)}
+						<button class="mini" disabled={!canStore(run, id, run.location)} onclick={() => { if (store(run, id, run.location)) warehouseMsg = `Stored ${ITEMS[id]?.name ?? id} in ${cityName(loc, run.year)}.`; }}>
+							⬇ {t('Store')} {ITEMS[id]?.glyph ?? ''} {ITEMS[id]?.name ?? id}
+						</button>
+					{/each}
+				</div>
+			{/if}
+			{#if warehouseCities(run).length === 0}
+				<p class="muted small">No goods stored in any city warehouse yet.</p>
+			{:else}
+				<ul class="fleet">
+					{#each warehouseCities(run) as wCity (wCity)}
+						{@const items = warehouseAt(run, wCity)}
+						<li>
+							<div class="row between">
+								<b>{cityName(CITY[wCity], run.year)}{wCity === run.location ? ' (here)' : ''}</b>
+								<small class="muted">{items.length}/{warehouseCapacity(run)} stored</small>
+							</div>
+							<div class="runs">
+								{#each items as id, i (id + i)}
+									{#if wCity === run.location}
+										<button class="mini run" disabled={locked} onclick={() => { if (retrieve(run, id, wCity)) warehouseMsg = `Retrieved ${ITEMS[id]?.name ?? id}.`; else warehouseMsg = 'No room in your bag.'; }}>
+											⬆ {t('Retrieve')} {ITEMS[id]?.glyph ?? ''} {ITEMS[id]?.name ?? id}
+										</button>
+									{:else if !locked}
+										<button class="mini run" onclick={() => {
+											const res = shipTo(run, id, wCity, run.location);
+											warehouseMsg = !res.ok ? (res.reason ?? 'Cannot ship right now.') : res.lost ? `Lost at sea while shipping from ${cityName(CITY[wCity], run.year)} (-${res.cost} silver).` : `Shipped ${ITEMS[id]?.name ?? id} to ${cityName(loc, run.year)} (${res.cost} silver, ${res.days}d).`;
+										}}>
+											🚢 {t('Ship to')} {cityName(loc, run.year)}: {ITEMS[id]?.glyph ?? ''} {ITEMS[id]?.name ?? id}
+										</button>
+									{/if}
+								{/each}
+							</div>
+						</li>
+					{/each}
+				</ul>
+			{/if}
 		</section>
 		<section>
 			<h4>{t('Ships & caravans')} ({run.ventures.length}/4)</h4>

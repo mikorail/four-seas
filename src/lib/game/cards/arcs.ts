@@ -22,28 +22,43 @@ export const ARCS: Template[] = [
 			const meet = Number(c.run.flags.rivalMeet ?? 0);
 			const n = r.npc;
 			const ahead = r.arrive - c.run.day;
+			const existing = (c.run.people ?? []).find((x) => x.id === `rival-${n.seed}` || x.npc.name === n.name);
+			const profile = existing ?? {
+				id: `rival-${n.seed}`,
+				npc: n,
+				city: c.city.id,
+				venue: 'inn',
+				traits: ['quick', 'silver-tongue'],
+				likes: ['talk', 'sea'],
+				dislikes: ['cruel'],
+				bio: `Bound for ${cityLabel(c, c.run.destination)} on the same commission.`,
+				bond: 0,
+				stage: 'rival' as const,
+				met: c.run.day,
+				last: c.run.day
+			};
 			const base = { id: 'rival', npc: n, badge: 'Rival' } as const;
 			if (meet === 0)
 				return {
 					...base,
 					text: `Across the room, a traveller with the seal of a rival court raises a cup. "${n.name}. Also bound for ${cityLabel(c, c.run.destination)}. May the best courier win." Rumor says they arrive in about ${ahead} days.`,
-					left: ch('Toast to fair play', { fortune: 6, renown: 3 }, { setFlag: { rivalMeet: 1 }, text: 'You drink together. You almost like them.' }),
-					right: ch('Spike their drink', { fortune: -6 }, { tags: ['crime', 'cruel'], heat: 12, rivalDelay: 8, setFlag: { rivalMeet: 1 }, text: `${n.name} sleeps for two days. Oops.` })
+					left: ch('Toast to fair play', { fortune: 6, renown: 3 }, { setFlag: { rivalMeet: 1 }, person: { profile, bond: 15 }, text: 'You drink together. You almost like them.' }),
+					right: ch('Spike their drink', { fortune: -6 }, { tags: ['crime', 'cruel'], heat: 12, rivalDelay: 8, setFlag: { rivalMeet: 1 }, person: { profile, bond: -25, stage: 'rival' }, text: `${n.name} sleeps for two days. Oops.` })
 				};
 			if (meet === 1)
 				return {
 					...base,
-					text: `Your ${c.where === 'travel' ? 'captain' : 'innkeeper'} confesses: ${n.name} paid him to delay you. He offers to un-confess — for a price.`,
-					left: ch('Pay him double', { silver: -10 }, { setFlag: { rivalMeet: 2 }, text: 'Loyalty is a market like any other.' }),
-					right: ch('Confront the rival', {}, { tags: ['fight'], setFlag: { rivalMeet: 2 }, gamble: { p: odds(c, 0.5, ['fight']), win: { fx: { renown: 10 }, text: `${n.name} limps away, delayed.`, days: 0 }, lose: { fx: { vigor: -12 }, days: 2, text: 'You lose the fight and two days.' } }, rivalDelay: 4 }),
-					up: withCrew(c, 'thief') ? up('Cat burglar', 'Steal their route maps', {}, { setFlag: { rivalMeet: 2 }, rivalDelay: 12, tags: ['crime'], heat: 8, text: 'Without maps, they will wander for days.' }) : undefined
+					text: `Your ${c.where === 'travel' ? 'captain' : 'innkeeper'} confesses: ${n.name} paid him to delay you. He offers to un-confess, for a price.`,
+					left: ch('Pay him double', { silver: -10 }, { setFlag: { rivalMeet: 2 }, person: { profile, bond: -5 }, text: 'Loyalty is a market like any other.' }),
+					right: ch('Confront the rival', {}, { tags: ['fight'], setFlag: { rivalMeet: 2 }, person: { profile, bond: -15, stage: 'rival' }, gamble: { p: odds(c, 0.5, ['fight']), win: { fx: { renown: 10 }, text: `${n.name} limps away, delayed.`, days: 0 }, lose: { fx: { vigor: -12 }, days: 2, text: 'You lose the fight and two days.' } }, rivalDelay: 4 }),
+					up: withCrew(c, 'thief') ? up('Cat burglar', 'Steal their route maps', {}, { setFlag: { rivalMeet: 2 }, rivalDelay: 12, tags: ['crime'], heat: 8, person: { profile, bond: -20, stage: 'rival' }, text: 'Without maps, they will wander for days.' }) : undefined
 				};
 			return {
 				...base,
 				text: `You find ${n.name} by the roadside, robbed and feverish, their commission scattered in the mud. "Go on," they rasp. "You've won."`,
-				left: ch('Leave them', { fortune: -12 }, { tags: ['cruel'], setFlag: { rivalMeet: 3 }, rivalDelay: 15, text: 'You win. It tastes of mud.' }),
-				right: ch('Help them up', { vigor: -6, fortune: 14, renown: 8 }, { tags: ['mercy'], setFlag: { rivalMeet: 3, rivalFriend: true }, days: 1, text: '"Strange courier," they say. "Thank you. I will remember."' }),
-				up: carrying(c, 'medicine') ? up('Medicine chest', 'Treat their fever', { fortune: 16, renown: 10 }, { itemRemove: ['medicine'], setFlag: { rivalMeet: 3 }, text: 'Mercy, then the race resumes, friendlier.' }) : undefined
+				left: ch('Leave them', { fortune: -12 }, { tags: ['cruel'], setFlag: { rivalMeet: 3 }, rivalDelay: 15, person: { profile, bond: -30, stage: 'rival' }, text: 'You win. It tastes of mud.' }),
+				right: ch('Help them up', { vigor: -6, fortune: 14, renown: 8 }, { tags: ['mercy'], setFlag: { rivalMeet: 3, rivalFriend: true }, days: 1, person: { profile, bond: 35, stage: 'friend' }, text: '"Strange courier," they say. "Thank you. I will remember."' }),
+				up: carrying(c, 'medicine') ? up('Medicine chest', 'Treat their fever', { fortune: 16, renown: 10 }, { itemRemove: ['medicine'], setFlag: { rivalMeet: 3, rivalFriend: true }, person: { profile, bond: 40, stage: 'friend' }, text: 'Mercy, then the race resumes, friendlier.' }) : undefined
 			};
 		}
 	},
@@ -57,13 +72,28 @@ export const ARCS: Template[] = [
 			const r = c.run.rival!;
 			const sec = nearSecret(c, 4);
 			const danger = (c.run.world ?? []).find((w) => w.kind === 'disaster' || w.kind === 'plague');
+			const existing = (c.run.people ?? []).find((x) => x.id === `rival-${r.npc.seed}` || x.npc.name === r.npc.name);
+			const profile = existing ?? {
+				id: `rival-${r.npc.seed}`,
+				npc: r.npc,
+				city: c.city.id,
+				venue: 'inn',
+				traits: ['quick', 'silver-tongue'],
+				likes: ['talk', 'sea'],
+				dislikes: ['cruel'],
+				bio: `Bound for ${cityLabel(c, c.run.destination)} on the same commission.`,
+				bond: 25,
+				stage: 'friend' as const,
+				met: c.run.day,
+				last: c.run.day
+			};
 			return {
 				id: 'rival-ally',
 				npc: r.npc,
-				badge: 'Rival — and friend?',
-				text: `**${r.npc.name}** catches up with you on the road, still a little pale from that fever. "I owe you. So — one thing, then we are even, and may the faster courier win."`,
-				left: sec ? ch('“Tell me a road nobody uses.”', {}, { tags: ['talk'], setFlag: { rivalAlly: true, ['secret:' + sec.id]: true }, text: `"${sec.hint[0].toUpperCase() + sec.hint.slice(1)}." They grin. "Do not tell anyone I told you."` }) : ch('“Tell me what is ahead.”', { fortune: 6 }, { setFlag: { rivalAlly: true }, text: '"Bad roads, honest innkeepers, one terrible ferry." Useful, all of it.' }),
-				right: ch('“Let us travel together a while.”', { vigor: 6, renown: 4 }, { tags: ['loyal'], setFlag: { rivalAlly: true }, rivalDelay: -2, days: -1, text: danger ? `Together you avoid ${danger.label.toLowerCase()} by a day. Then they are gone at dawn, a half-length ahead.` : 'Two couriers on one road, racing and laughing. For a few days it is not a race at all.' })
+				badge: 'Rival & friend',
+				text: `**${r.npc.name}** catches up with you on the road, still a little pale from that fever. "I owe you. So: one thing, then we are even, and may the faster courier win."`,
+				left: sec ? ch('“Tell me a road nobody uses.”', {}, { tags: ['talk'], setFlag: { rivalAlly: true, ['secret:' + sec.id]: true }, person: { profile, bond: 15, stage: 'confidant' }, text: `"${sec.hint[0].toUpperCase() + sec.hint.slice(1)}." They grin. "Do not tell anyone I told you."` }) : ch('“Tell me what is ahead.”', { fortune: 6 }, { setFlag: { rivalAlly: true }, person: { profile, bond: 15, stage: 'friend' }, text: '"Bad roads, honest innkeepers, one terrible ferry." Useful, all of it.' }),
+				right: ch('“Let us travel together a while.”', { vigor: 6, renown: 4 }, { tags: ['loyal'], setFlag: { rivalAlly: true }, rivalDelay: -2, days: -1, person: { profile, bond: 25, stage: 'confidant' }, text: danger ? `Together you avoid ${danger.label.toLowerCase()} by a day. Then they are gone at dawn, a half-length ahead.` : 'Two couriers on one road, racing and laughing. For a few days it is not a race at all.' })
 			};
 		}
 	},

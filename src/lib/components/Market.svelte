@@ -6,6 +6,7 @@
 	import { CULTURES } from '#lib/data/cultures';
 	import { bagPrice, buy, buyBag, isNightMarket, marketStock, priceOf, sell, sellValue, stockOf, venuesHere } from '#lib/game/market';
 	import { EXTRA_BAGS, cellsUsed, maxExtraBags } from '#lib/game/bag';
+	import { canStore, guildRank, guildTitle, retrieve, store, warehouseAt, warehouseCapacity, warehouseCities } from '#lib/game/guild';
 	import { capacity } from '#lib/game/cards/index';
 	import * as sfx from '#lib/audio';
 	import { t } from '#lib/i18n.svelte';
@@ -14,7 +15,7 @@
 
 	let { run, onclose }: { run: Run; onclose: () => void } = $props();
 
-	let tab = $state<'clothes' | 'curios' | 'maps' | 'supplies' | 'sell'>('clothes');
+	let tab = $state<'clothes' | 'curios' | 'maps' | 'supplies' | 'sell' | 'warehouse'>('clothes');
 	let msg = $state('');
 	let tryOn = $state<string | null>(null);
 
@@ -84,7 +85,7 @@
 		</div>
 	{/if}
 	<nav class="tabs">
-		{#each [['clothes', '👘 Clothes'], ['curios', '🏺 Curios'], ['maps', '🗺️ Maps'], ['supplies', '🍙 Supplies'], ['sell', '⚖️ Sell']] as [id, label]}
+		{#each [['clothes', '👘 Clothes'], ['curios', '🏺 Curios'], ['maps', '🗺️ Maps'], ['supplies', '🍙 Supplies'], ['sell', '⚖️ Sell'], ['warehouse', '🏪 ' + t('Warehouse')]] as [id, label]}
 			<button class:on={tab === id} onclick={() => ((tab = id as typeof tab), (msg = ''))}>{label}</button>
 		{/each}
 	</nav>
@@ -213,6 +214,41 @@
 				{/if}
 			{/each}
 		</ul>
+	{:else if tab === 'warehouse'}
+		{@const storedHere = warehouseAt(run, run.location)}
+		<p class="muted small"><b>{guildTitle(run)}</b> ({t('Guild rank')} {guildRank(run)}/5) · {storedHere.length}/{warehouseCapacity(run)} stored in {cityName(city, run.year)} · {warehouseCities(run).length}/3 warehouse cities active.</p>
+		{#if storedHere.length}
+			<ul class="goods">
+				{#each storedHere as id, i (id + i)}
+					{@const it = ITEMS[id]}
+					<li>
+						<span class="g">{it?.glyph ?? '📦'}</span>
+						<span class="n"><b>{it?.name ?? id}</b><small>Stored in {cityName(city, run.year)}</small></span>
+						<button class="buy" onclick={() => {
+							if (retrieve(run, id, run.location)) msg = `Retrieved: ${it?.name ?? id}.`;
+							else msg = 'No room in your bag.';
+						}}>⬆ {t('Retrieve')}</button>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+		{#if run.bag.length}
+			<ul class="goods">
+				{#each run.bag as id, i (id + i)}
+					{@const it = ITEMS[id]}
+					<li>
+						<span class="g">{it?.glyph ?? '📦'}</span>
+						<span class="n"><b>{it?.name ?? id}</b><small>{it?.desc ?? ''}</small></span>
+						<button class="buy" disabled={!canStore(run, id, run.location)} onclick={() => {
+							if (store(run, id, run.location)) msg = `Stored: ${it?.name ?? id}.`;
+							else msg = 'Warehouse full or city limit (3) reached.';
+						}}>⬇ {t('Store')}</button>
+					</li>
+				{/each}
+			</ul>
+		{:else if !storedHere.length}
+			<p class="muted">Nothing in your bag or stored here.</p>
+		{/if}
 	{:else}
 		{#if prizedHere.length > 1}
 			<button class="buy sell all" onclick={sellPrized}>⚖️ Sell all {prizedHere.length} curios prized here (+{prizedHere.reduce((a, x) => a + x.v, 0)})</button>

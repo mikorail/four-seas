@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Rng } from '#lib/rng';
-import { SCHEMA, availableRoutes, choose, depart, exportRun, importRun, newRun, parseRun, randomHero } from '#lib/game/engine';
+import { SCHEMA, availableRoutes, choose, consumeSaveToast, depart, exportRun, importRun, newRun, nextAssignment, parseRun, randomHero, save, serializePlain } from '#lib/game/engine';
 
 const store: Record<string, string> = {};
 (globalThis as { localStorage?: unknown }).localStorage = { getItem: (k: string) => store[k] ?? null, setItem: (k: string, v: string) => (store[k] = v), removeItem: (k: string) => delete store[k] };
@@ -27,6 +27,73 @@ describe('save files', () => {
 			else choose(back, guard % 2 ? 'left' : 'right');
 		}
 		expect(back.day).toBeGreaterThan(0);
+	});
+
+	it('old v4 plain-JSON saves still load alongside compressed saves', () => {
+		const run = newRun(randomHero(new Rng(42), 1720), 'v4-plain', 1720);
+		const plain = serializePlain(run);
+		expect(plain.startsWith('{')).toBe(true);
+		const loaded = parseRun(plain)!;
+		expect(loaded).not.toBeNull();
+		expect(loaded.hero.name).toBe(run.hero.name);
+		expect(loaded.schema).toBe(SCHEMA);
+	});
+
+	it('a 3000-step pilgrim journey with assignments stays under 1 MB', () => {
+		const r = new Rng(77);
+		const run = newRun(randomHero(r, 1680), 'pilgrim-3000', 1680, { difficulty: 'pilgrim' });
+		for (let step = 0; step < 3000; step++) {
+			// Keep stats healthy so the pilgrim journey continues across assignments for 3000 steps
+			run.stats.silver = Math.max(35, Math.min(70, run.stats.silver));
+			run.stats.vigor = Math.max(35, Math.min(70, run.stats.vigor));
+			run.stats.renown = Math.max(35, Math.min(70, run.stats.renown));
+			run.stats.fortune = Math.max(35, Math.min(70, run.stats.fortune));
+			run.mind = Math.max(45, run.mind ?? 70);
+			run.heat = Math.min(20, run.heat);
+			if (run.phase === 'end') {
+				nextAssignment(run);
+			} else if (run.phase === 'map') {
+				const routes = availableRoutes(run);
+				depart(run, routes[step % routes.length]);
+			} else {
+				choose(run, step % 2 === 0 ? 'left' : 'right');
+			}
+		}
+		const exported = exportRun(run);
+		expect(exported.length).toBeLessThan(1_000_000);
+		const restored = parseRun(exported)!;
+		expect(restored).not.toBeNull();
+		expect(restored.cardsSeen).toBeGreaterThan(500);
+	}, 20_000);
+
+	it('QuotaExceededError drops restore points, retries, and records a toast', () => {
+		const run = newRun(randomHero(new Rng(12), 1750), 'quota', 1750);
+		run.restorePoints = [serializePlain(run), serializePlain(run)];
+		run.undo = serializePlain(run);
+		let calls = 0;
+		const origStorage = (globalThis as { localStorage?: unknown }).localStorage;
+		(globalThis as { localStorage?: unknown }).localStorage = {
+			getItem: (k: string) => store[k] ?? null,
+			setItem: (k: string, v: string) => {
+				calls++;
+				if (calls === 1) {
+					const err = new Error('QuotaExceededError');
+					err.name = 'QuotaExceededError';
+					throw err;
+				}
+				store[k] = v;
+			},
+			removeItem: (k: string) => delete store[k]
+		};
+		try {
+			save(run);
+			expect(calls).toBe(2);
+			expect(run.restorePoints).toEqual([]);
+			expect(run.undo).toBeNull();
+			expect(consumeSaveToast()).toContain('Storage space was low');
+		} finally {
+			(globalThis as { localStorage?: unknown }).localStorage = origStorage;
+		}
 	});
 
 	it('export → import round-trips, and junk is rejected', () => {

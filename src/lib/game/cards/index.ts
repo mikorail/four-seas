@@ -32,12 +32,13 @@ import { LIFE_T } from './life';
 import { COMPANION_T } from './companions';
 import { ROADSIDE_T } from './roadside';
 import { REBELLION_T } from './rebellion';
+import { GUILD_T } from './guild';
 import { VENUE_CARD } from './venues';
 import type { VenueId } from '#lib/data/venues';
 import { CONTENT_TEMPLATES } from '#lib/content/index';
 import { companionBaggageCard } from '../companions';
 
-export const TEMPLATES: Template[] = [...TRAVEL, ...UNMARKED_T, ...CITY_T, ...ANY_T, ...CRIME, ...RETINUE, ...ERA, ...LEGEND_T, ...ARCS, ...FAITH_T, ...STORIES, ...KARMA_T, ...FESTIVAL_T, ...DEPTH_T, ...WORLD_T, ...SECRET_T, ...SIDE_T, ...ROMANCE_T, ...REBELLION_T, ...RARE_T, ...DISASTER_T, ...DEATH_T, ...TURMOIL_T, ...GRAVE_T, ...STORY_T, ...FAIR_T, ...CONTRABAND_T, ...LIFE_T, ...COMPANION_T, ...ROADSIDE_T, ...WAYFARER_T, ...CONTENT_TEMPLATES];
+export const TEMPLATES: Template[] = [...TRAVEL, ...UNMARKED_T, ...CITY_T, ...ANY_T, ...CRIME, ...RETINUE, ...ERA, ...LEGEND_T, ...ARCS, ...FAITH_T, ...STORIES, ...KARMA_T, ...FESTIVAL_T, ...DEPTH_T, ...WORLD_T, ...SECRET_T, ...SIDE_T, ...ROMANCE_T, ...REBELLION_T, ...RARE_T, ...DISASTER_T, ...DEATH_T, ...TURMOIL_T, ...GRAVE_T, ...STORY_T, ...FAIR_T, ...CONTRABAND_T, ...LIFE_T, ...COMPANION_T, ...ROADSIDE_T, ...WAYFARER_T, ...GUILD_T, ...CONTENT_TEMPLATES];
 
 export { LEGENDS } from './legends';
 export { capacity } from './helpers';

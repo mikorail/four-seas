@@ -35,6 +35,7 @@ export const CODEX: CodexEntry[] = [
 	{ id: 'letters', glyph: '✉️', title: 'Letters and home', text: 'Write to friends, your sweetheart, your patron or your family from your journal; replies catch up with you on the road. Buy a home to rest better, keep a stash and earn from your garden.', when: (r) => (r.people ?? []).length > 0 || !!r.romance },
 	{ id: 'titles', glyph: '🏵', title: 'Titles and collections', text: 'Do enough of something and the world gives you a name for it; each title makes certain people warmer. Taste every cuisine, cross famous bridges, see the wonders: completed collections give lasting perks.', when: (r) => (r.titles?.length ?? 0) > 0 || Object.values(r.collected ?? {}).some((x) => x.length >= 3) },
 	{ id: 'photo', glyph: '📷', title: 'Photo mode', text: 'The camera button over the globe hides everything but the world and a caption. Esc to return.', when: (r) => r.visited.length >= 4 },
+	{ id: 'guild', glyph: '⚖', title: 'Guild rank and warehouses', text: 'Trading at markets and fulfilling contracts raises your Merchant Guild rank (0 to 5), unlocking discounts and guild charters. Store curios in warehouses across up to three cities and ship them where they fetch the highest price.', when: (r) => Number(r.flags['guild:vol'] ?? 0) > 0 || Object.keys(r.warehouse ?? {}).length > 0 },
 	{ id: 'dynasty', glyph: '家', title: 'Your line goes on', text: 'When a journey ends, a child, apprentice or cousin can carry on with your relics, half your standing, and all your enemies.', when: (r) => r.phase === 'end' }
 ];
 
